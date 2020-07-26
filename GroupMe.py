@@ -9,4 +9,3 @@ messages = group.messages.list()
 allMessages = list(group.messages.list().autopage())
 last_message = allMessages[0]
 
-print(last_message)
