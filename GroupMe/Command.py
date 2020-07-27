@@ -1,3 +1,4 @@
+### Contains Commands for Bot ###
 class Command(object):
     def __init__(self):
         self.commands = {
