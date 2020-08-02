@@ -5,7 +5,7 @@ from GroupMe.Command import Command
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
 
-# New Bot Class
+
 class Bot:
     def __init__(self, name, id):
         print("Bot is initiated!")
