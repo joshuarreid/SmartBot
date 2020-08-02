@@ -1,26 +1,26 @@
-class Command(object):
+class Command:
     def __init__(self):
         self.commands = {
-            "!help": self.help,
-            "!test": self.test
+            "!stop": self.stop,
+            "help": self.help
         }
 
-
     def handle_command(self, command):
-        response = ""
-
+        response= ""
         if command in self.commands:
             response += self.commands[command]()
         else:
             response += "Sorry I don't understand the command: " + command + ". " + self.help()
-
+        print("handle command returning: " + response)
         return response
+
+    def stop(self):
+        return "!stop"
 
     def help(self):
-        response = "Currently I support the following commands: "
-        for command in self.commands:
-            response += command
-        return response
+        response = "help:\r\n"
 
-    def test(self):
-        return "This is a test!"
+        for command in self.commands:
+            response += command + "\r\n"
+
+        return response

@@ -1,35 +1,34 @@
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
-
+import time
+from GroupMe.Command import Command
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
 
 
-class Bot(object):
-    def __init__(self):
-        self.bot_name = "SmartBot"
-        self.bot_id = bot_id
-
+class Bot:
+    def __init__(self, name, id):
+        print("Bot is initiated!")
+        self.bot_name = name
+        self.bot_id = id
+        self.lastMsgID = (list(group.messages.list(limit=1)))[0].id
+        self.command = Command()
+        self.listen()
 
     def listen(self):
-        __allMessages = list(group.messages.list().autopage())  # Fetching all messages
-        mostRecentMessage = None
-        if __allMessages:
-            print("Successfully connected, listening for commands")
-            while True:
-                __recentMessage = list(group.messages.list_since(message_id=__allMessages[0].id))  ## Tracks most recent message
-                if __recentMessage != mostRecentMessage:
-                    return __recentMessage
-                    sleep(3)
 
+        while True:
+            nextMessageList = list(group.messages.list_since(message_id=self.lastMsgID))
 
-
-
-
-
-
-        if not __allMessages:
-            exit("Error, Connection Failed")
+            if nextMessageList:
+                nextMessage =  nextMessageList[0]
+                text = nextMessage.text
+                response = self.command.handle_command(text)
+                if response == "!stop":
+                    break
+                print(response)
+                self.lastMsgID = nextMessage.id
+            time.sleep(4)
 
 
 
