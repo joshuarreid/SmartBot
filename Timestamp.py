@@ -73,6 +73,17 @@ def twentyFourHours():
     timeStamps["time_to"] = fetchTimestamp(currentYear, currentMonth, currentDay, currentHour, currentMinute)
     return timeStamps
 
+### Grabs timestamps from pasts hour ###
+def pastThreeHours():
+    timeStamps = {
+        "time_from": 0,
+        "time_to": 0,
+    }
+    timeStamps["time_from"] = fetchTimestamp(currentYear, currentMonth, currentDay, currentHour-3, currentMinute)
+    timeStamps["time_to"] = fetchTimestamp(currentYear, currentMonth, currentDay, currentHour, currentMinute)
+    return timeStamps
+
+
 
 ### Grabs timestamps from one year ago (within same hour) ###
 def threeSixFive():

@@ -17,6 +17,10 @@ def lastDayTracks():
         Timestamp.twentyFourHours()["time_to"]))
     return lastDayTracksList
 
+def pastThreeHoursTracks():
+    pastThreeHoursList = getTracks(int(Timestamp.pastThreeHours()["time_from"]), int(
+        Timestamp.pastThreeHours()["time_to"]))
+    return pastThreeHoursList
 
 ### Grabs played tracks from a year ago ###
 def oneYearAgoTracks():
