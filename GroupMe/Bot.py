@@ -18,16 +18,18 @@ class Bot:
     def listen(self):
 
         while True:
-            nextMessageList = list(group.messages.list_since(message_id=self.lastMsgID))
-
-            if nextMessageList:
-                nextMessage =  nextMessageList[0]
+            nextMessageList = []
+            nextMessageList = list(group.messages.list_after(message_id=self.lastMsgID))
+            if len(nextMessageList) != 0:
+                nextMessage = nextMessageList[0]
                 text = nextMessage.text
                 response = self.command.handle_command(text)
+                self.lastMsgID = nextMessage.id
                 if response == "!stop":
                     break
-                print(response)
-                self.lastMsgID = nextMessage.id
+
+
+
             time.sleep(4)
 
 
