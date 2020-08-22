@@ -24,12 +24,8 @@ class Bot:
             if len(nextMessageList) != 0:
                 nextMessage = nextMessageList[0]
                 text = nextMessage.text
-<<<<<<< HEAD
                 user = nextMessage.name
                 response = self.command.handle_command(text, user)
-=======
-                response = self.command.handle_command(text)
->>>>>>> 86f3895a79c4bacc4ce191847e7b1661940ece19
                 self.lastMsgID = nextMessage.id
                 if response == "!stop":
                     client.bots.post(bot_id=bot_id, text="Going Offline!")
