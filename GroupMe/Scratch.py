@@ -158,7 +158,7 @@ def commands():
             counter = 1
 
 '''
-
+'''
 bot = Bot("SmartBot", bot_id)
 #stop = Stop("!stop")
 #help = Help("!help")
@@ -166,3 +166,9 @@ bot = Bot("SmartBot", bot_id)
 #stop.handleCommand()
 #help.handleCommand()
 
+'''
+
+
+recentFive = list(group.messages.list(limit=5))
+for item in recentFive:
+    print(item.name)
