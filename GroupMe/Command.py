@@ -1,22 +1,14 @@
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
 import LastFm
+from GroupMe import Users
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
+Users = Users.Users
 
 
 class Command:
     def __init__(self):
-        self.usersLastFM = {
-            "Joshua Reid": "bumi_",
-            "Carly Mclaughlin": "carly_mac1",
-            "Jason Allen": "FGMatrix",
-            "Grace Tang": "gracetangg",
-            "Ethan Page": "ethriverpage",
-            "James Gibbs": "jgibblett",
-            "Dominic Lightfoot": "Domlightfoot"
-        }
-
         self.commands = {
             "!stop": self.stop,
             "!help": self.help,
@@ -67,7 +59,7 @@ class Command:
     ### Command lists music that was listened to one year ago ###
     def musicLastYear(self, user):
         response = "One Year Ago Tracks: \r\n"
-        trackList = LastFm.oneYearAgoTracks(str(self.usersLastFM[user]))
+        trackList = LastFm.oneYearAgoTracks(str(Users.usersLastFM[user]))
         if not trackList:
             response+= "None"
         else:
@@ -83,7 +75,7 @@ class Command:
     ### Command lists music from the past 24 hours ###
     def musicRecents(self, user):
         response = "Recently Played Tracks: \r\n"
-        trackList = LastFm.lastDayTracks(str(self.usersLastFM[user]))
+        trackList = LastFm.lastDayTracks(str(Users.usersLastFM[user]))
         if not trackList:
             response+= "None"
         else:
@@ -102,7 +94,7 @@ class Command:
     ### ---------- Modify to allow user to select interval ---------- ###
     def TopTracks(self, user):
         response = "Top Tracks: \r\n"
-        trackList = LastFm.topTracks(str(self.usersLastFM[user]))
+        trackList = LastFm.topTracks(str(Users.usersLastFM[user]))
         if not trackList:
             response+= "None"
         else:
