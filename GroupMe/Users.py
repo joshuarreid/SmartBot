@@ -6,7 +6,9 @@ class Users:
             "Grace Tang": "gracetangg",
             "Ethan Page": "ethriverpage",
             "James Gibbs": "jgibblett",
-            "Dominic Lightfoot": "Domlightfoot"
+            "Dominic Lightfoot": "Domlightfoot",
+            "Luke Bourneuf": "lukebourneuf",
+            "Alex Riley": "bullrover"
         }
 
         userPermissions = {

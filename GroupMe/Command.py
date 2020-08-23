@@ -18,7 +18,7 @@ class Command:
             "!musicrecents": self.musicRecents,
             "!toptracks": self.TopTracks,
             "!playcount": self.playCount,
-            #"!rankscrobbles": self.rankScrobbles
+            "!nowplaying": self.nowPlaying
 
         }
 
@@ -29,7 +29,7 @@ class Command:
             "!musicrecents": "Recent Tracks (24hrs)",
             "!toptracks": "Overall Top Tracks",
             "!playcount": "Total plays",
-            #"!rankscrobbles": "Scrobble Ranks"
+            "!nowplaying": "Currently playing song"
         }
 
 
@@ -53,7 +53,7 @@ class Command:
             response = "None"
         else:
             for item in list:
-                if len(response) < 960: ### Checking if response is under the 1000 character limit ###
+                if len(response) < 900: ### Checking if response is under the 1000 character limit ###
                     try:
                         response += LastFm.playbackTime(item.playback_date) + "  " + str(item.track.artist) + " - " + str(item.track.title) + "\r\n"
                     except UnicodeEncodeError: ### If the track or artist title has non ascii characters ###
@@ -69,7 +69,7 @@ class Command:
         else:
             counter = 1
             for item in list:
-                if len(response) < 960: ### Checking if response is under the 1000 character limit ###
+                if len(response) < 900: ### Checking if response is under the 1000 character limit ###
                     try:
                             response += str(counter) + ". " + str(item.item.artist) + " - " + str(item.item.title) + "\r\n"
                             counter+=1
@@ -101,32 +101,48 @@ class Command:
 
     ### Command lists music that was listened to one year ago ###
     def musicLastYear(self, user):
-        response = "One Year Ago Tracks: \r\n"
+        response = "One Year Ago Tracks: @" + str(user) + "\r\n"
         trackList = LastFm.oneYearAgoTracks(str(Users.usersLastFM[user]))
-        response += self.timeTrackList(trackList)
+        response += str(self.timeTrackList(trackList))
         return response
 
 
     ### Command lists music from the past 24 hours ###
     def musicRecents(self, user):
-        response = "Recently Played Tracks: \r\n"
+        response = "Recently Played Tracks: @" + str(user) + "\r\n"
         trackList = LastFm.lastDayTracks(str(Users.usersLastFM[user]))
-        response += self.timeTrackList(trackList)
+        response += str(self.timeTrackList(trackList))
         return response
 
 
     ### Command lists top tracks of all time ###
     ### TODO odify to allow user to select interval  ###
     def TopTracks(self, user):
-        response = "Top Tracks: \r\n"
+        response = "Top Tracks: @" + str(user) + "\r\n"
         trackList = LastFm.topTracks(str(Users.usersLastFM[user]))
         response += self.rankTrackList(trackList)
         return response
 
 
     def playCount(self, user):
-        response = "Total Scrobbles: " + str(LastFm.playCount(str(Users.usersLastFM[user])))
+        response = "Total Scrobbles: @" + str(user) + "\r\n" + str(LastFm.playCount(str(Users.usersLastFM[user])))
         return response
+
+
+    def nowPlaying(self, user):
+        response = "Currently Playing: @" + str(user) + "\r\n"
+        now_playing = LastFm.nowPlaying(str(Users.usersLastFM[user]))
+        if None in now_playing:
+            response += "None"
+        else:
+            for item in now_playing:
+                try:
+                    response += str(item.artist) + " - " + str(item.title)
+                except UnicodeEncodeError:
+                    response += "Unreadable Track"
+        return response
+
+
 
     ### TODO ranking scrobbles of users ###
     #def rankScrobbles(self):
