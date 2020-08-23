@@ -1,4 +1,5 @@
 from datetime import datetime
+from Timestamp import utcToEst
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
 import LastFm
@@ -45,6 +46,43 @@ class Command:
                 return response
 
 
+    ### Gives a listed response in format "hr:minAM/PM  artist - title" ###
+    def timeTrackList(self, list):
+        response = ""
+        if not list:
+            response = "None"
+        else:
+            for item in list:
+                if len(response) < 960: ### Checking if response is under the 1000 character limit ###
+                    try:
+                        response += LastFm.playbackTime(item.playback_date) + "  " + str(item.track.artist) + " - " + str(item.track.title) + "\r\n"
+                    except UnicodeEncodeError: ### If the track or artist title has non ascii characters ###
+                        response += LastFm.playbackTime(item.playback_date) + "  " + "Unreadable Track"
+            return response
+
+
+    ### Gives a listed response in format "rank. artist - title"" ###
+    def rankTrackList(self, list):
+        response = ""
+        if not list:
+            response = "None"
+        else:
+            counter = 1
+            for item in list:
+                if len(response) < 960: ### Checking if response is under the 1000 character limit ###
+                    try:
+                            response += str(counter) + ". " + str(item.item.artist) + " - " + str(item.item.title) + "\r\n"
+                            counter+=1
+                    except UnicodeEncodeError:  ### If the track or artist title has non ascii characters ###
+                            response += str(counter) + ". " + "Unreadable Track"
+                            counter+=1
+
+            return response
+
+
+
+
+
     ### Command stops the bot ###
     def stop(self, user):
         stop = "!stop"
@@ -65,15 +103,7 @@ class Command:
     def musicLastYear(self, user):
         response = "One Year Ago Tracks: \r\n"
         trackList = LastFm.oneYearAgoTracks(str(Users.usersLastFM[user]))
-        if not trackList:
-            response+= "None"
-        else:
-            for item in trackList:
-                if len(response) < 950: ### Checking if response is under the 1000 character limit ###
-                    try:
-                        response += str(item.playback_date)[13:] + ": " + str(item.track.artist) + " - " + str(item.track.title) + "\r\n"
-                    except UnicodeEncodeError: ### If the track or artist title has non ascii characters ###
-                        response += str(item.playback_date)[13:] + ": " + str(item.playback_date) + "Unreadable Track"
+        response += self.timeTrackList(trackList)
         return response
 
 
@@ -81,17 +111,7 @@ class Command:
     def musicRecents(self, user):
         response = "Recently Played Tracks: \r\n"
         trackList = LastFm.lastDayTracks(str(Users.usersLastFM[user]))
-        if not trackList:
-            response+= "None"
-        else:
-            for item in trackList:
-                if len(response) < 950:      ### Checking if response is under the 1000 character limit ###
-                    try:
-                        response += str(item.playback_date)[13:] + ": " + str(item.track.artist) + " - " + str(item.track.title) + "\r\n"
-                    except UnicodeEncodeError:   ### If the track or artist title has non ascii characters ###
-                        response += str(item.playback_date)[13:] + ": " + str(item.playback_date) + "Unreadable Track"
-                else:
-                    return response
+        response += self.timeTrackList(trackList)
         return response
 
 
@@ -100,21 +120,7 @@ class Command:
     def TopTracks(self, user):
         response = "Top Tracks: \r\n"
         trackList = LastFm.topTracks(str(Users.usersLastFM[user]))
-        if not trackList:
-            response+= "None"
-        else:
-            counter = 1
-            for item in trackList:
-                if len(response) < 950: ### Checking if response is under the 1000 character limit ###
-                    try:
-                            response += str(counter) + ". " + str(item.item.artist) + " - " + str(item.item.title) + "\r\n"
-                            counter+=1
-                    except UnicodeEncodeError:  ### If the track or artist title has non ascii characters ###
-                            response += str(counter) + ". " + "Unreadable Track"
-                            counter+=1
-                else:
-                    return response
-
+        response += self.rankTrackList(trackList)
         return response
 
 

@@ -94,3 +94,24 @@ def threeSixFive():
     timeStamps["time_from"] =fetchTimestamp(currentYear-1, currentMonth, currentDay, currentHour-1, currentMinute)
     timeStamps["time_to"] = fetchTimestamp(currentYear-1, currentMonth, currentDay, currentHour, currentMinute)
     return timeStamps
+
+### Converts Hour and Minute to EST from UTC and formats it to "hr:min AM/PM" ###
+### Format of time: hour:min (Military Time) ###
+def utcToEst(time):
+    hour = int(time[0:2])
+    min = int(time[3:])
+    if (hour - 4) < 0:
+        hour = 24 + (hour - 4)
+    else:
+        hour -= 4
+
+    if min < 10:
+        min = "0" + str(min)
+
+    if hour >= 12:
+        estTime = str(hour) + ":" + str(min) + "pm"
+    else:
+        estTime = str(hour) + ":" + str(min) + "am"
+    return estTime
+
+

@@ -6,11 +6,15 @@ import Timestamp
 #LASTFM = lastfm_network.get_user(lastfm_username)
 
 
+### Corrects playback time ####
+def playbackTime(time):
+    hourMin = str(time)[13:]
+    return Timestamp.utcToEst(hourMin)
+
 ### Grabs played tracks within a time interval ###
 def getTracks(time_from, time_to, user):
     tracks = lastfm_network.get_user(user).get_recent_tracks(cacheable=False, limit=None, time_from=time_from, time_to=time_to)
     return tracks
-
 
 ### Grabs played tracks from last 24 hours ###
 def lastDayTracks(user):
