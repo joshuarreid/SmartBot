@@ -16,8 +16,8 @@ class Bot:
         self.command = Command()
         self.listen()
 
+    ### Listens for commands in the chat ###
     def listen(self):
-
         while True:
             nextMessageList = []
             nextMessageList = list(group.messages.list_after(message_id=self.lastMsgID))
@@ -27,10 +27,16 @@ class Bot:
                 user = nextMessage.name
                 response = self.command.handle_command(text, user)
                 self.lastMsgID = nextMessage.id
+
+                ### Stop command ###
                 if response == "!stop":
-                    client.bots.post(bot_id=bot_id, text="Going Offline!")
-                    print("Bot is initiated!")
-                    break
+                    if user == "Joshua Reid": ### Only owner can !stop the bot ###
+                        client.bots.post(bot_id=bot_id, text="Going Offline!")
+                        print("Bot is offline.")
+                        break
+                    else:
+                        client.bots.post(bot_id=bot_id, text="Access denied: only Joshua Reid can use this command")
+
 
 
 

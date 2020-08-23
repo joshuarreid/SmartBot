@@ -34,7 +34,7 @@ def nowPlaying(user):
     return now_playing
 
 def topTracks(user):
-    topTracksList = lastfm_network.get_user(user).get_top_tracks(period="PERIOD_OVERALL",limit=10)
+    topTracksList = lastfm_network.get_user(user).get_top_tracks(period="PERIOD_OVERALL", limit=25)
     return topTracksList
 
 
