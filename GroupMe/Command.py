@@ -11,7 +11,10 @@ class Command:
             "Joshua Reid": "bumi_",
             "Carly Mclaughlin": "carly_mac1",
             "Jason Allen": "FGMatrix",
-            "Grace Tang": "gracetangg"
+            "Grace Tang": "gracetangg",
+            "Ethan Page": "ethriverpage",
+            "James Gibbs": "jgibblett",
+            "Dominic Lightfoot": "Domlightfoot"
         }
 
         self.commands = {
