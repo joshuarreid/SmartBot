@@ -38,6 +38,12 @@ def topTracks(user):
     return topTracksList
 
 
+### TODO Modify to add comma to the number ###
+def playCount(user):
+    playCount = lastfm_network.get_user(user).get_playcount()
+    return '{:,}'.format(playCount) ### formats number with comma
+
+
 
 
 

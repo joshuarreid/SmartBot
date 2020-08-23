@@ -1,3 +1,4 @@
+from datetime import datetime
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
 import time
@@ -8,7 +9,7 @@ group = client.groups.get(groupy_id)
 
 class Bot:
     def __init__(self, name, id):
-        print("Bot is initiated!")
+        print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + "Bot is initiated!")
         client.bots.post(bot_id=bot_id, text="Bot is initiated!")
         self.bot_name = name
         self.bot_id = id

@@ -1,3 +1,4 @@
+from datetime import datetime
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
 import LastFm
@@ -11,19 +12,23 @@ class Command:
     def __init__(self):
         self.commands = {
             "!stop": self.stop,
-            "!help": self.help,
+            "!commands": self.commandList,
             "!musiclastyear": self.musicLastYear,
             "!musicrecents": self.musicRecents,
             "!toptracks": self.TopTracks,
+            "!playcount": self.playCount,
+            #"!rankscrobbles": self.rankScrobbles
 
         }
 
         self.commandDescriptions = {
             "!stop": "terminates bot",
-            "!help": "Lists all commands",
+            "!commands": "Lists all commands",
             "!musiclastyear": "Tracks 1 year ago",
             "!musicrecents": "Recent Tracks (24hrs)",
-            "!toptracks": "Overall Top Tracks"
+            "!toptracks": "Overall Top Tracks",
+            "!playcount": "Total plays",
+            #"!rankscrobbles": "Scrobble Ranks"
         }
 
 
@@ -35,7 +40,7 @@ class Command:
                 return "!stop"
             else:
                 response += str(self.commands[command](user))
-                print("handling command by " + user + ": " + command)
+                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + command)
                 client.bots.post(bot_id=bot_id, text=str(response))
                 return response
 
@@ -47,7 +52,7 @@ class Command:
 
 
     ### Command lists all of the available commands ###
-    def help(self, user):
+    def commandList(self, user):
         response = "Commands:\r\n"
 
         for command in self.commandDescriptions:
@@ -91,7 +96,7 @@ class Command:
 
 
     ### Command lists top tracks of all time ###
-    ### ---------- Modify to allow user to select interval ---------- ###
+    ### TODO odify to allow user to select interval  ###
     def TopTracks(self, user):
         response = "Top Tracks: \r\n"
         trackList = LastFm.topTracks(str(Users.usersLastFM[user]))
@@ -111,6 +116,16 @@ class Command:
                     return response
 
         return response
+
+
+    def playCount(self, user):
+        response = "Total Scrobbles: " + str(LastFm.playCount(str(Users.usersLastFM[user])))
+        return response
+
+    ### TODO ranking scrobbles of users ###
+    #def rankScrobbles(self):
+
+
 
 
 
