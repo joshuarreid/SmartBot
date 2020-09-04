@@ -34,16 +34,25 @@ class Command:
 
 
     ### Function handles each command and creates the correct response ###
-    def handle_command(self, command, user):
+    def handle_command(self, commandString, user):
         response= ""
-        if command in self.commands:
-            if command == "!stop":
-                return "!stop"
-            else:
-                response += str(self.commands[command](user))
-                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + command)
+        if commandString == "!stop":
+            return "!stop"
+        commandStringSplit = commandString.split()
+        if commandStringSplit[0] in self.commands:
+            if len(commandStringSplit) == 1:
+                response += str(self.commands[commandStringSplit[0]](user))
+                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + commandStringSplit[0])
                 client.bots.post(bot_id=bot_id, text=str(response))
                 return response
+
+            elif len(commandStringSplit) == 2:
+                response += str(self.commands[commandStringSplit[0]](user, commandStringSplit[1]))
+                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + commandStringSplit[0] + " - " + commandStringSplit[1])
+                client.bots.post(bot_id=bot_id, text=str(response))
+                return response
+
+
 
 
     ### Gives a listed response in format "hr:minAM/PM  artist - title" ###
