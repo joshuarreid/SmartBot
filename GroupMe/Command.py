@@ -66,9 +66,9 @@ class Command:
             for item in list:
                 if len(response) < 900: ### Checking if response is under the 1000 character limit ###
                     try:
-                        response += LastFm.playbackTime(item.playback_date) + "  " + str(item.track.artist) + " - " + str(item.track.title) + "\r\n"
+                        response += LastFm.correctPlaybackTime(item.playback_date) + "  " + str(item.track.artist) + " - " + str(item.track.title) + "\r\n"
                     except UnicodeEncodeError: ### If the track or artist title has non ascii characters ###
-                        response += LastFm.playbackTime(item.playback_date) + "  " + "Unreadable Track"
+                        response += LastFm.correctPlaybackTime(item.playback_date) + "  " + "Unreadable Track"
             return response
 
 
@@ -141,10 +141,11 @@ class Command:
         else:
             botResponse = "Try: \r\n"
             for item in periodOptions:
-                botResponse += "!toptracks + " + item + "\r\n"
+                botResponse += "!toptracks {" + item + "}\r\n"
         return botResponse
 
-    ### TODO Program Crashes: fix the response formatting ###
+
+
     def TopArtists(self, user, period="overall"):
         periodOptions = {
             "overall": "overall",
@@ -154,13 +155,26 @@ class Command:
         }
         botResponse = "Top Artists: @" + str(user) + "\r\n"
         if period in periodOptions:
-            trackList = LastFm.topArtist(str(Users.usersLastFM[user]), periodOptions[period])
-            botResponse += self.rankFormatedTrackList(trackList)
+            listOfArtists = LastFm.topArtist(str(Users.usersLastFM[user]), periodOptions[period])
+            if not listOfArtists:
+                botResponse += "None"
+            else:
+                rank =1
+                for item in listOfArtists:
+                    if len(botResponse) < 900:  ### Checking if response is under the 1000 character limit ###
+                        try:
+                            botResponse += str(rank) + ". " + str(item.item) + " (" + str(item.weight) + " plays)\r\n"
+                            rank+=1
+                        except UnicodeEncodeError:  ### If the track or artist title has non ascii characters ###
+                            botResponse += str(rank) + ". Unreadable Artist (" + str(item.weight) + ")\r\n"
+                            rank+=1
+                return botResponse
         else:
             botResponse = "Try: \r\n"
             for item in periodOptions:
-                botResponse += "!topartists + " + item + "\r\n"
+                botResponse += "!topartists {" + item + "}\r\n"
         return botResponse
+
 
 
     def playCount(self, user):

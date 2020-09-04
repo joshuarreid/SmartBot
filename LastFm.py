@@ -7,7 +7,7 @@ import Timestamp
 
 
 ### Corrects playback time ####
-def playbackTime(time):
+def correctPlaybackTime(time):
     hourMin = str(time)[13:]
     return Timestamp.utcToEst(hourMin)
 

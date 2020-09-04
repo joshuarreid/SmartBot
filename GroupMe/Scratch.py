@@ -4,5 +4,5 @@ import Timestamp
 topTracksList = lastfm_network.get_user("bumi_").get_top_artists(period="12month", limit=50)
 counter = 1
 for item in topTracksList:
-    print(item)
+    print(str(item.item) + " " + str(item.weight))
 
