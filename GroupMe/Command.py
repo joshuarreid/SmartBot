@@ -17,6 +17,7 @@ class Command:
             "!musiclastyear": self.musicLastYear,
             "!musicrecents": self.musicRecents,
             "!toptracks": self.TopTracks,
+            "!topartists": self.TopArtists,
             "!playcount": self.playCount,
             "!nowplaying": self.nowPlaying
 
@@ -27,7 +28,8 @@ class Command:
             "!commands": "Lists all commands",
             "!musiclastyear": "Tracks 1 year ago",
             "!musicrecents": "Recent Tracks (24hrs)",
-            "!toptracks": "Overall Top Tracks",
+            "!toptracks": "Top Tracks",
+            "!topartists": "Top Artists",
             "!playcount": "Total plays",
             "!nowplaying": "Currently playing song"
         }
@@ -48,7 +50,7 @@ class Command:
 
             elif len(commandStringSplit) == 2:
                 response += str(self.commands[commandStringSplit[0]](user, commandStringSplit[1]))
-                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + commandStringSplit[0] + " - " + commandStringSplit[1])
+                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + commandStringSplit[0] + " " + commandStringSplit[1])
                 client.bots.post(bot_id=bot_id, text=str(response))
                 return response
 
@@ -56,7 +58,7 @@ class Command:
 
 
     ### Gives a listed response in format "hr:minAM/PM  artist - title" ###
-    def timeTrackList(self, list):
+    def timeFormatedTrackList(self, list):
         response = ""
         if not list:
             response = "None"
@@ -71,7 +73,7 @@ class Command:
 
 
     ### Gives a listed response in format "rank. artist - title"" ###
-    def rankTrackList(self, list):
+    def rankFormatedTrackList(self, list):
         response = ""
         if not list:
             response = "None"
@@ -112,7 +114,7 @@ class Command:
     def musicLastYear(self, user):
         response = "One Year Ago Tracks: @" + str(user) + "\r\n"
         trackList = LastFm.oneYearAgoTracks(str(Users.usersLastFM[user]))
-        response += str(self.timeTrackList(trackList))
+        response += str(self.timeFormatedTrackList(trackList))
         return response
 
 
@@ -120,17 +122,45 @@ class Command:
     def musicRecents(self, user):
         response = "Recently Played Tracks: @" + str(user) + "\r\n"
         trackList = LastFm.lastDayTracks(str(Users.usersLastFM[user]))
-        response += str(self.timeTrackList(trackList))
+        response += str(self.timeFormatedTrackList(trackList))
         return response
 
 
-    ### Command lists top tracks of all time ###
-    ### TODO odify to allow user to select interval  ###
-    def TopTracks(self, user):
-        response = "Top Tracks: @" + str(user) + "\r\n"
-        trackList = LastFm.topTracks(str(Users.usersLastFM[user]))
-        response += self.rankTrackList(trackList)
-        return response
+    ### Command lists top tracks ###
+    def TopTracks(self, user, period="overall"):
+        periodOptions = {
+            "overall": "overall",
+            "week": "7day",
+            "month": "1month",
+            "year": "12month"
+        }
+        botResponse = "Top Tracks: @" + str(user) + "\r\n"
+        if period in periodOptions:
+            trackList = LastFm.topTracks(str(Users.usersLastFM[user]), periodOptions[period])
+            botResponse += self.rankFormatedTrackList(trackList)
+        else:
+            botResponse = "Try: \r\n"
+            for item in periodOptions:
+                botResponse += "!toptracks + " + item + "\r\n"
+        return botResponse
+
+    ### TODO Program Crashes: fix the response formatting ###
+    def TopArtists(self, user, period="overall"):
+        periodOptions = {
+            "overall": "overall",
+            "week": "7day",
+            "month": "1month",
+            "year": "12month"
+        }
+        botResponse = "Top Artists: @" + str(user) + "\r\n"
+        if period in periodOptions:
+            trackList = LastFm.topArtist(str(Users.usersLastFM[user]), periodOptions[period])
+            botResponse += self.rankFormatedTrackList(trackList)
+        else:
+            botResponse = "Try: \r\n"
+            for item in periodOptions:
+                botResponse += "!topartists + " + item + "\r\n"
+        return botResponse
 
 
     def playCount(self, user):

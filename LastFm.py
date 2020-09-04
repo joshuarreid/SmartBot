@@ -37,9 +37,15 @@ def nowPlaying(user):
     now_playing = [lastfm_network.get_user(user).get_now_playing()]
     return now_playing
 
-def topTracks(user):
-    topTracksList = lastfm_network.get_user(user).get_top_tracks(period="PERIOD_OVERALL", limit=25)
+def topTracks(user, periodInput):
+        topTracksList = lastfm_network.get_user(user).get_top_tracks(period = periodInput, limit=25)
+        return topTracksList
+
+
+def topArtist(user, periodInput):
+    topTracksList = lastfm_network.get_user(user).get_top_artists(period=periodInput, limit=25)
     return topTracksList
+
 
 
 ### TODO Modify to add comma to the number ###

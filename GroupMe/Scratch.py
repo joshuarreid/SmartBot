@@ -1,13 +1,8 @@
-"""
-def handle_command(self, command, user):
-    response = ""
-    if command in self.commands:
-        if command == "!stop":
-            return "!stop"
-        else:
-            response += str(self.commands[command](user))
-            print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + command)
-            client.bots.post(bot_id=bot_id, text=str(response))
-            return response
+import pylast
+from Token import lastfm_network, lastfm_username
+import Timestamp
+topTracksList = lastfm_network.get_user("bumi_").get_top_artists(period="12month", limit=50)
+counter = 1
+for item in topTracksList:
+    print(item)
 
-"""
