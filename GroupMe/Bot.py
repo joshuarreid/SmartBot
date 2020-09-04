@@ -13,25 +13,25 @@ class Bot:
         client.bots.post(bot_id=bot_id, text="Bot is initiated!")
         self.bot_name = name
         self.bot_id = id
-        self.lastMsgID = (list(group.messages.list(limit=1)))[0].id
+        self.recentMessageID = (list(group.messages.list(limit=1)))[0].id
         self.command = Command()
         self.listen()
 
     ### Listens for commands in the chat ###
     def listen(self):
         while True:
-            nextMessageList = []
-            nextMessageList = list(group.messages.list_after(message_id=self.lastMsgID))
-            if len(nextMessageList) != 0:
-                nextMessage = nextMessageList[0]
-                text = nextMessage.text
-                user = nextMessage.name
-                response = self.command.handle_command(text, user)
-                self.lastMsgID = nextMessage.id
+            fetchedMessageList = []
+            fetchedMessageList = list(group.messages.list_after(message_id=self.recentMessageID))
+            if len(fetchedMessageList) != 0:
+                mostRecentMessage = fetchedMessageList[0]
+                recentMessageContent = mostRecentMessage.text
+                recentMessageUser = mostRecentMessage.name
+                botResponse = self.command.handle_command(recentMessageContent, recentMessageUser)
+                self.recentMessageID = mostRecentMessage.id
 
                 ### Stop command ###
-                if response == "!stop":
-                    if user == "Joshua Reid": ### Only owner can !stop the bot ###
+                if botResponse == "!stop":
+                    if recentMessageUser == "Joshua Reid": ### Only owner can !stop the bot ###
                         client.bots.post(bot_id=bot_id, text="Going Offline!")
                         print("Bot is offline.")
                         break
