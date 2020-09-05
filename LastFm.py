@@ -6,30 +6,30 @@ import Timestamp
 #LASTFM = lastfm_network.get_user(lastfm_username)
 
 
-### Corrects playback time ####
-def correctPlaybackTime(time):
-    hourMin = str(time)[13:]
+### Converts playback time from UTC time zone to EST time zone ####
+def playbackTimeUtcToEst(utcTime):
+    hourMin = str(utcTime)[13:]
     return Timestamp.utcToEst(hourMin)
 
 ### Grabs played tracks within a time interval ###
-def getTracks(time_from, time_to, user):
-    tracks = lastfm_network.get_user(user).get_recent_tracks(cacheable=False, limit=None, time_from=time_from, time_to=time_to)
-    return tracks
+def getTracksTimeInterval(timeFrom, timeTo, user):
+    trackList = lastfm_network.get_user(user).get_recent_tracks(cacheable=False, limit=None, time_from=timeFrom, time_to=timeTo)
+    return trackList
 
 ### Grabs played tracks from last 24 hours ###
-def lastDayTracks(user):
-    lastDayTracksList = getTracks(int(Timestamp.twentyFourHours()["time_from"]), int(
+def playbackPastDay(user):
+    pastDayTrackList = getTracksTimeInterval(int(Timestamp.twentyFourHours()["time_from"]), int(
         Timestamp.twentyFourHours()["time_to"]), user)
-    return lastDayTracksList
+    return pastDayTrackList
 
-def pastThreeHoursTracks(user):
-    pastThreeHoursList = getTracks(int(Timestamp.pastThreeHours()["time_from"]), int(
+def playbackPastThreeHours(user):
+    pastThreeHoursTrackList = getTracksTimeInterval(int(Timestamp.pastThreeHours()["time_from"]), int(
         Timestamp.pastThreeHours()["time_to"]), user)
-    return pastThreeHoursList
+    return pastThreeHoursTrackList
 
 ### Grabs played tracks from a year ago ###
 def oneYearAgoTracks(user):
-    oneYearAgoTracksList = getTracks(int(Timestamp.threeSixFive()["time_from"]), int(
+    oneYearAgoTracksList = getTracksTimeInterval(int(Timestamp.threeSixFive()["time_from"]), int(
         Timestamp.threeSixFive()["time_to"]), user)
     return oneYearAgoTracksList
 

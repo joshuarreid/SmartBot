@@ -13,13 +13,13 @@ class Command:
     def __init__(self):
         self.commands = {
             "!stop": self.stop,
-            "!commands": self.commandList,
-            "!musiclastyear": self.musicLastYear,
-            "!musicrecents": self.musicRecents,
-            "!toptracks": self.TopTracks,
-            "!topartists": self.TopArtists,
-            "!playcount": self.playCount,
-            "!nowplaying": self.nowPlaying
+            "!commands": self.listCommands,
+            "!musiclastyear": self.playbacksOneYearAgo,
+            "!musicrecents": self.recentPlaybacks,
+            "!toptracks": self.listTopTracks,
+            "!topartists": self.listTopArtists,
+            "!playcount": self.playbackCount,
+            "!nowplaying": self.currentlyPlaying
 
         }
 
@@ -36,59 +36,59 @@ class Command:
 
 
     ### Function handles each command and creates the correct response ###
-    def handle_command(self, commandString, user):
-        response= ""
-        if commandString == "!stop":
+    def handle_command(self, command, user):
+        botResponse = ""
+        if command == "!stop":
             return "!stop"
-        commandStringSplit = commandString.split()
-        if commandStringSplit[0] in self.commands:
-            if len(commandStringSplit) == 1:
-                response += str(self.commands[commandStringSplit[0]](user))
-                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + commandStringSplit[0])
-                client.bots.post(bot_id=bot_id, text=str(response))
-                return response
+        splitCommandList = command.split()
+        if splitCommandList[0] in self.commands:
+            if len(splitCommandList) == 1:
+                botResponse += str(self.commands[splitCommandList[0]](user))
+                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[0])
+                client.bots.post(bot_id=bot_id, text=str(botResponse))
+                return botResponse
 
-            elif len(commandStringSplit) == 2:
-                response += str(self.commands[commandStringSplit[0]](user, commandStringSplit[1]))
-                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + commandStringSplit[0] + " " + commandStringSplit[1])
-                client.bots.post(bot_id=bot_id, text=str(response))
-                return response
+            elif len(splitCommandList) == 2:
+                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1]))
+                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[0] + " " + splitCommandList[1])
+                client.bots.post(bot_id=bot_id, text=str(botResponse))
+                return botResponse
 
 
 
 
     ### Gives a listed response in format "hr:minAM/PM  artist - title" ###
-    def timeFormatedTrackList(self, list):
-        response = ""
-        if not list:
-            response = "None"
+    def timeFormatedTrackList(self, listOfTracks):
+        botResponse = ""
+        if not listOfTracks:
+            botResponse = "None"
         else:
-            for item in list:
-                if len(response) < 900: ### Checking if response is under the 1000 character limit ###
+            for track in listOfTracks:
+                if len(botResponse) < 900: ### Checking if response is under the 1000 character limit ###
                     try:
-                        response += LastFm.correctPlaybackTime(item.playback_date) + "  " + str(item.track.artist) + " - " + str(item.track.title) + "\r\n"
+                        botResponse += LastFm.playbackTimeUtcToEst(track.playback_date) + "  " + str(track.track.artist) + " - " + str(track.track.title) + "\r\n"
                     except UnicodeEncodeError: ### If the track or artist title has non ascii characters ###
-                        response += LastFm.correctPlaybackTime(item.playback_date) + "  " + "Unreadable Track"
-            return response
+                        botResponse += LastFm.playbackTimeUtcToEst(track.playback_date) + "  " + "Unreadable Track"
+            return botResponse
 
 
     ### Gives a listed response in format "rank. artist - title"" ###
-    def rankFormatedTrackList(self, list):
-        response = ""
-        if not list:
-            response = "None"
+    def rankFormatedTrackList(self, listOfTracks):
+        botResponse = ""
+        if not listOfTracks:
+            botResponse = "None"
         else:
-            counter = 1
-            for item in list:
-                if len(response) < 900: ### Checking if response is under the 1000 character limit ###
+            rank = 1
+            for item in listOfTracks:
+                if len(botResponse) < 900: ### Checking if response is under the 1000 character limit ###
                     try:
-                            response += str(counter) + ". " + str(item.item.artist) + " - " + str(item.item.title) + "\r\n"
-                            counter+=1
+                            botResponse += str(rank) + ". " + str(item.item.artist) + " - " + str(item.item.title) + "\r\n"
+                            rank+=1
                     except UnicodeEncodeError:  ### If the track or artist title has non ascii characters ###
-                            response += str(counter) + ". " + "Unreadable Track"
-                            counter+=1
+                            botResponse += str(rank) + ". " + "Unreadable Track"
+                            rank+=1
 
-            return response
+            return botResponse
 
 
 
@@ -101,17 +101,17 @@ class Command:
 
 
     ### Command lists all of the available commands ###
-    def commandList(self, user):
-        response = "Commands:\r\n"
+    def listCommands(self, user):
+        botResponse = "Commands:\r\n"
 
         for command in self.commandDescriptions:
-            response += "-" + command + ": " + self.commandDescriptions[command] + "\r\n"
+            botResponse += "-" + command + ": " + self.commandDescriptions[command] + "\r\n"
 
-        return response
+        return botResponse
 
 
     ### Command lists music that was listened to one year ago ###
-    def musicLastYear(self, user):
+    def playbacksOneYearAgo(self, user):
         response = "One Year Ago Tracks: @" + str(user) + "\r\n"
         trackList = LastFm.oneYearAgoTracks(str(Users.usersLastFM[user]))
         response += str(self.timeFormatedTrackList(trackList))
@@ -119,15 +119,15 @@ class Command:
 
 
     ### Command lists music from the past 24 hours ###
-    def musicRecents(self, user):
+    def recentPlaybacks(self, user):
         response = "Recently Played Tracks: @" + str(user) + "\r\n"
-        trackList = LastFm.lastDayTracks(str(Users.usersLastFM[user]))
+        trackList = LastFm.playbackPastDay(str(Users.usersLastFM[user]))
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
 
     ### Command lists top tracks ###
-    def TopTracks(self, user, period="overall"):
+    def listTopTracks(self, user, period="overall"):
         periodOptions = {
             "overall": "overall",
             "week": "7day",
@@ -136,8 +136,8 @@ class Command:
         }
         botResponse = "Top Tracks: @" + str(user) + "\r\n"
         if period in periodOptions:
-            trackList = LastFm.topTracks(str(Users.usersLastFM[user]), periodOptions[period])
-            botResponse += self.rankFormatedTrackList(trackList)
+            topTrackList = LastFm.topTracks(str(Users.usersLastFM[user]), periodOptions[period])
+            botResponse += self.rankFormatedTrackList(topTrackList)
         else:
             botResponse = "Try: \r\n"
             for item in periodOptions:
@@ -146,7 +146,7 @@ class Command:
 
 
 
-    def TopArtists(self, user, period="overall"):
+    def listTopArtists(self, user, period="overall"):
         periodOptions = {
             "overall": "overall",
             "week": "7day",
@@ -177,23 +177,23 @@ class Command:
 
 
 
-    def playCount(self, user):
-        response = "Total Scrobbles: @" + str(user) + "\r\n" + str(LastFm.playCount(str(Users.usersLastFM[user])))
-        return response
+    def playbackCount(self, user):
+        playBackCount = "Total Scrobbles: @" + str(user) + "\r\n" + str(LastFm.playCount(str(Users.usersLastFM[user])))
+        return playBackCount
 
 
-    def nowPlaying(self, user):
-        response = "Currently Playing: @" + str(user) + "\r\n"
-        now_playing = LastFm.nowPlaying(str(Users.usersLastFM[user]))
-        if None in now_playing:
-            response += "None"
+    def currentlyPlaying(self, user):
+        botResponse = "Currently Playing: @" + str(user) + "\r\n"
+        currentlyPlayingTrackList = LastFm.nowPlaying(str(Users.usersLastFM[user]))
+        if None in currentlyPlayingTrackList:
+            botResponse += "None"
         else:
-            for item in now_playing:
+            for track in currentlyPlayingTrackList:
                 try:
-                    response += str(item.artist) + " - " + str(item.title)
+                    botResponse += str(track.artist) + " - " + str(track.title)
                 except UnicodeEncodeError:
-                    response += "Unreadable Track"
-        return response
+                    botResponse += "Unreadable Track"
+        return botResponse
 
 
 
