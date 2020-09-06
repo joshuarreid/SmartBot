@@ -20,5 +20,7 @@ def fetchLastFmUsername(user):
     lastFmUsername = cur.fetchone()[0]
     return lastFmUsername
 
-print(fetchLastFmUsername("Joshua Rei"))
+
+cur.execute("SELECT username FROM LastFm INNER JOIN GroupMe ON GroupMe.GroupMeID = LastFm.GroupMeID WHERE GroupMe.name = 'Joshua Reid'")
+print(cur.fetchall())
 

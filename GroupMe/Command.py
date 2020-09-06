@@ -13,6 +13,7 @@ class Command:
         self.commands = {
             "!stop": self.stop,
             "!commands": self.listCommands,
+            #"!newuser": self.addNewUser,
             "!musiclastyear": self.playbacksOneYearAgo,
             "!musicrecents": self.recentPlaybacks,
             "!toptracks": self.listTopTracks,
@@ -108,11 +109,15 @@ class Command:
 
         return botResponse
 
+    ### TODO command to add new users to database ###
+    #def addNewUser(self, name, lastFmUsername):
+
+
 
     ### Command lists music that was listened to one year ago ###
     def playbacksOneYearAgo(self, user):
         response = "One Year Ago Tracks: @" + str(user) + "\r\n"
-        trackList = LastFm.oneYearAgoTracks(Database.fetchLastFmUsername(user))
+        trackList = LastFm.oneYearAgoTracks(Database.getLastFmUsername(user))
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
@@ -120,7 +125,7 @@ class Command:
     ### Command lists music from the past 24 hours ###
     def recentPlaybacks(self, user):
         response = "Recently Played Tracks: @" + str(user) + "\r\n"
-        trackList = LastFm.playbackPastDay(Database.fetchLastFmUsername(user))
+        trackList = LastFm.playbackPastDay(Database.getLastFmUsername(user))
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
@@ -135,7 +140,7 @@ class Command:
         }
         botResponse = "Top Tracks: @" + str(user) + "\r\n"
         if period in periodOptions:
-            topTrackList = LastFm.getTopTracks(Database.fetchLastFmUsername(user), periodOptions[period])
+            topTrackList = LastFm.getTopTracks(Database.getLastFmUsername(user), periodOptions[period])
             botResponse += self.rankFormatedTrackList(topTrackList)
         else:
             botResponse = "Try: \r\n"
@@ -154,7 +159,7 @@ class Command:
         }
         botResponse = "Top Artists: @" + str(user) + "\r\n"
         if period in periodOptions:
-            listOfArtists = LastFm.getTopArtist(Database.fetchLastFmUsername(user), periodOptions[period])
+            listOfArtists = LastFm.getTopArtist(Database.getLastFmUsername(user), periodOptions[period])
             if not listOfArtists:
                 botResponse += "None"
             else:
@@ -177,13 +182,13 @@ class Command:
 
 
     def playbackCount(self, user):
-        playBackCount = "Total Scrobbles: @" + str(user) + "\r\n" + str(LastFm.playCount(Database.fetchLastFmUsername(user)))
+        playBackCount = "Total Scrobbles: @" + str(user) + "\r\n" + str(LastFm.playCount(Database.getLastFmUsername(user)))
         return playBackCount
 
 
     def currentlyPlaying(self, user):
         botResponse = "Currently Playing: @" + str(user) + "\r\n"
-        currentlyPlayingTrackList = LastFm.getNowPlaying(Database.fetchLastFmUsername(user))
+        currentlyPlayingTrackList = LastFm.getNowPlaying(Database.getLastFmUsername(user))
         if None in currentlyPlayingTrackList:
             botResponse += "None"
         else:
