@@ -2,9 +2,7 @@ from datetime import datetime
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
 import time
-from GroupMe.Command import Command
-client = Client.from_token(groupyToken)
-group = client.groups.get(groupy_id)
+from GroupMe.Command import Command, client, group
 
 
 class Bot:

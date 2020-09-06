@@ -2,9 +2,6 @@ import pylast
 from Token import lastfm_network, lastfm_username
 import Timestamp
 
-###Changing lastfm_username here allows to lookup any account###
-#LASTFM = lastfm_network.get_user(lastfm_username)
-
 
 ### Converts playback time from UTC time zone to EST time zone ####
 def playbackTimeUtcToEst(utcTime):
@@ -33,22 +30,20 @@ def oneYearAgoTracks(user):
         Timestamp.threeSixFive()["time_to"]), user)
     return oneYearAgoTracksList
 
-def nowPlaying(user):
+def getNowPlaying(user):
     now_playing = [lastfm_network.get_user(user).get_now_playing()]
     return now_playing
 
-def topTracks(user, periodInput):
+def getTopTracks(user, periodInput):
         topTracksList = lastfm_network.get_user(user).get_top_tracks(period = periodInput, limit=25)
         return topTracksList
 
 
-def topArtist(user, periodInput):
+def getTopArtist(user, periodInput):
     topTracksList = lastfm_network.get_user(user).get_top_artists(period=periodInput, limit=25)
     return topTracksList
 
 
-
-### TODO Modify to add comma to the number ###
 def playCount(user):
     playCount = lastfm_network.get_user(user).get_playcount()
     return '{:,}'.format(playCount) ### formats number with comma

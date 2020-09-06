@@ -1,9 +1,9 @@
 from datetime import datetime
-from Timestamp import utcToEst
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
 import LastFm
 from GroupMe import Users
+import Sqlite
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
 Users = Users.Users
@@ -117,11 +117,11 @@ class Command:
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
-
+    ### TODO convert all commands to search database for LastFM Username ###
     ### Command lists music from the past 24 hours ###
     def recentPlaybacks(self, user):
         response = "Recently Played Tracks: @" + str(user) + "\r\n"
-        trackList = LastFm.playbackPastDay(str(Users.usersLastFM[user]))
+        trackList = LastFm.playbackPastDay(Sqlite.fetchLastFmUsername(user))
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
@@ -136,7 +136,7 @@ class Command:
         }
         botResponse = "Top Tracks: @" + str(user) + "\r\n"
         if period in periodOptions:
-            topTrackList = LastFm.topTracks(str(Users.usersLastFM[user]), periodOptions[period])
+            topTrackList = LastFm.getTopTracks(str(Users.usersLastFM[user]), periodOptions[period])
             botResponse += self.rankFormatedTrackList(topTrackList)
         else:
             botResponse = "Try: \r\n"
@@ -155,7 +155,7 @@ class Command:
         }
         botResponse = "Top Artists: @" + str(user) + "\r\n"
         if period in periodOptions:
-            listOfArtists = LastFm.topArtist(str(Users.usersLastFM[user]), periodOptions[period])
+            listOfArtists = LastFm.getTopArtist(str(Users.usersLastFM[user]), periodOptions[period])
             if not listOfArtists:
                 botResponse += "None"
             else:
@@ -184,7 +184,7 @@ class Command:
 
     def currentlyPlaying(self, user):
         botResponse = "Currently Playing: @" + str(user) + "\r\n"
-        currentlyPlayingTrackList = LastFm.nowPlaying(str(Users.usersLastFM[user]))
+        currentlyPlayingTrackList = LastFm.getNowPlaying(str(Users.usersLastFM[user]))
         if None in currentlyPlayingTrackList:
             botResponse += "None"
         else:
