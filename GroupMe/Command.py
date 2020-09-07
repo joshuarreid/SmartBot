@@ -11,7 +11,8 @@ group = client.groups.get(groupy_id)
 class Command:
     def __init__(self):
         self.commands = {
-            "!stop": self.stop,
+            #"!stop": self.stop,
+            "!reboot": self.reboot,
             "!commands": self.listCommands,
             #"!newuser": self.addNewUser,
             "!musiclastyear": self.playbacksOneYearAgo,
@@ -24,7 +25,8 @@ class Command:
         }
 
         self.commandDescriptions = {
-            "!stop": "terminates bot",
+            #"!stop": "terminates bot",
+            "!reboot": "restarts bot",
             "!commands": "Lists all commands",
             "!musiclastyear": "Tracks 1 year ago",
             "!musicrecents": "Recent Tracks (24hrs)",
@@ -40,6 +42,8 @@ class Command:
         botResponse = ""
         if command == "!stop":
             return "!stop"
+        elif command == "!reboot":
+            return "!reboot"
         splitCommandList = command.split()
         if splitCommandList[0] in self.commands:
             if len(splitCommandList) == 1:
@@ -95,9 +99,13 @@ class Command:
 
 
     ### Command stops the bot ###
-    def stop(self, user):
-        stop = "!stop"
-        return stop
+    #def stop(self, user):
+        #stop = "!stop"
+        #return stop
+
+    def reboot(self):
+        reboot = "!reboot"
+        return reboot
 
 
     ### Command lists all of the available commands ###

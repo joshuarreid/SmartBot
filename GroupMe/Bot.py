@@ -28,13 +28,18 @@ class Bot:
                 self.recentMessageID = mostRecentMessage.id
 
                 ### Stop command ###
-                if botResponse == "!stop":
-                    if recentMessageUser == "Joshua Reid": ### Only owner can !stop the bot ###
-                        client.bots.post(bot_id=bot_id, text="Going Offline!")
-                        print("Bot is offline.")
-                        break
-                    else:
-                        client.bots.post(bot_id=bot_id, text="Access denied: only Joshua Reid can use this command")
+                #if botResponse == "!stop":
+                    #if recentMessageUser == "Joshua Reid": ### Only owner can !stop the bot ###
+                        #client.bots.post(bot_id=bot_id, text="Going Offline!")
+                        #print("Bot is offline.")
+
+
+                    #else:
+                       # client.bots.post(bot_id=bot_id, text="Access denied: only Joshua Reid can use this command")
+                if botResponse == "!reboot":
+                    client.bots.post(bot_id=bot_id, text="Rebooting!")
+                    print("Bot is rebooting")
+                    break
 
 
 

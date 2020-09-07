@@ -1,5 +1,5 @@
 import pylast
-from Token import lastfm_network, lastfm_username
+from Token import lastfm_network
 import Timestamp
 
 
