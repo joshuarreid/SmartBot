@@ -1,4 +1,5 @@
 import sqlite3
+from LastFm import compareUsersTopArtists, compareUsersTopTracks
 
 conn = sqlite3.connect('/Users/joshuareid/Documents/GitHub/SmartBotDatabase/SmartBot.db')
 cur = conn.cursor()
@@ -22,5 +23,24 @@ def fetchLastFmUsername(user):
 
 
 cur.execute("SELECT username FROM LastFm INNER JOIN GroupMe ON GroupMe.GroupMeID = LastFm.GroupMeID WHERE GroupMe.name = 'Joshua Reid'")
-print(cur.fetchall())
+#print(cur.fetchall())
+list1 = [1,2,3]
+list2 = [1,3,4]
+combined = list(set.intersection(set(list1), set(list2)))
+print(combined)
+
+
+comparedArtists = compareUsersTopArtists("bumi_", "carly_mac1", "week")
+for item in comparedArtists:
+    print(item)
+
+print("\r\n \r\n \r\n")
+
+comparedTracks = compareUsersTopTracks("bumi_", "carly_mac1", "week")
+for item in comparedTracks:
+    print(item)
+
+
+
+
 

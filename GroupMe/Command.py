@@ -216,6 +216,8 @@ class Command:
 
 
 
+    #def compareMe(self, otherUser):
+
 
 
 

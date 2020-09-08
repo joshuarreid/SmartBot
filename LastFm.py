@@ -48,6 +48,39 @@ def playCount(user):
     playCount = lastfm_network.get_user(user).get_playcount()
     return '{:,}'.format(playCount) ### formats number with comma
 
+def compareUsersTopTracks(user, otherUser, periodInput):
+    topTracksListUser = lastfm_network.get_user(user).get_top_tracks(period = periodInput, limit = 50)
+    topTracksListOtherUser = lastfm_network.get_user(otherUser).get_top_tracks(period=periodInput, limit=50)
+
+    formattedTrackListUser = []
+    for track in topTracksListUser:
+        formattedTrackListUser.append(track.item.title)
+
+    formattedTrackListOtherUser = []
+    for track in topTracksListOtherUser:
+        formattedTrackListOtherUser.append(track.item.title)
+
+    commonTopTracksList = list(set.intersection(set(formattedTrackListUser), set(formattedTrackListOtherUser)))
+    return commonTopTracksList
+
+
+def compareUsersTopArtists(user, otherUser, periodInput):
+    topArtistsListUser = lastfm_network.get_user(user).get_top_artists(period=periodInput, limit = 50)
+    topArtistsListOtherUser = lastfm_network.get_user(otherUser).get_top_artists(period=periodInput, limit= 50)
+
+    formattedArtistListUser = []
+    for artist in topArtistsListUser:
+        formattedArtistListUser.append(artist.item)
+
+    formattedArtistListOtherUser = []
+    for artist in topArtistsListOtherUser:
+        formattedArtistListOtherUser.append(artist.item)
+
+    commonTopArtistsList = list(set.intersection(set(formattedArtistListUser), set(formattedArtistListOtherUser)))
+    return commonTopArtistsList
+
+
+
 
 
 
