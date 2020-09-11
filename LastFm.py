@@ -49,8 +49,8 @@ def playCount(user):
     return '{:,}'.format(playCount) ### formats number with comma
 
 def compareUsersTopTracks(user, otherUser, periodInput):
-    topTracksListUser = lastfm_network.get_user(user).get_top_tracks(period = periodInput, limit = 50)
-    topTracksListOtherUser = lastfm_network.get_user(otherUser).get_top_tracks(period=periodInput, limit=50)
+    topTracksListUser = lastfm_network.get_user(user).get_top_tracks(period = periodInput, limit = 150)
+    topTracksListOtherUser = lastfm_network.get_user(otherUser).get_top_tracks(period=periodInput, limit=150)
 
     formattedTrackListUser = []
     for track in topTracksListUser:
@@ -65,8 +65,8 @@ def compareUsersTopTracks(user, otherUser, periodInput):
 
 
 def compareUsersTopArtists(user, otherUser, periodInput):
-    topArtistsListUser = lastfm_network.get_user(user).get_top_artists(period=periodInput, limit = 50)
-    topArtistsListOtherUser = lastfm_network.get_user(otherUser).get_top_artists(period=periodInput, limit= 50)
+    topArtistsListUser = lastfm_network.get_user(user).get_top_artists(period=periodInput, limit = 100)
+    topArtistsListOtherUser = lastfm_network.get_user(otherUser).get_top_artists(period=periodInput, limit= 100)
 
     formattedArtistListUser = []
     for artist in topArtistsListUser:

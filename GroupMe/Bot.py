@@ -8,7 +8,7 @@ from GroupMe.Command import Command, client, group
 class Bot:
     def __init__(self, name, id):
         print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + "  " +  "Bot is initiated!")
-        client.bots.post(bot_id=bot_id, text="Bot is initiated!")
+        #client.bots.post(bot_id=bot_id, text="Bot is initiated!")
         self.bot_name = name
         self.bot_id = id
         self.recentMessageID = (list(group.messages.list(limit=1)))[0].id

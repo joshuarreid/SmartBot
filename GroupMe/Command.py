@@ -16,11 +16,12 @@ class Command:
             "!commands": self.listCommands,
             #"!newuser": self.addNewUser,
             "!musiclastyear": self.playbacksOneYearAgo,
-            "!musicrecents": self.recentPlaybacks,
+            "!recentlyplayed": self.recentPlaybacks,
             "!toptracks": self.listTopTracks,
             "!topartists": self.listTopArtists,
             "!playcount": self.playbackCount,
-            "!nowplaying": self.currentlyPlaying
+            "!nowplaying": self.currentlyPlaying,
+            "!compareme": self.compareMe
 
         }
 
@@ -29,21 +30,21 @@ class Command:
             "!reboot": "restarts bot",
             "!commands": "Lists all commands",
             "!musiclastyear": "Tracks 1 year ago",
-            "!musicrecents": "Recent Tracks (24hrs)",
+            "!recentlyplayed": "Recent Tracks (24hrs)",
             "!toptracks": "Top Tracks",
             "!topartists": "Top Artists",
             "!playcount": "Total plays",
-            "!nowplaying": "Currently playing song"
+            "!nowplaying": "Currently playing song",
+            "!compareme": "Compare to other user"
         }
 
 
     ### Function handles each command and creates the correct response ###
     def handle_command(self, command, user):
         botResponse = ""
-        if command == "!stop":
-            return "!stop"
-        elif command == "!reboot":
+        if command == "!reboot":
             return "!reboot"
+
         splitCommandList = command.split()
         if splitCommandList[0] in self.commands:
             if len(splitCommandList) == 1:
@@ -57,6 +58,17 @@ class Command:
                 print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[0] + " " + splitCommandList[1])
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
                 return botResponse
+
+            elif len(splitCommandList) == 3:
+                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1], splitCommandList[2]))
+                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[0] + " " + splitCommandList[1] + " " + splitCommandList[2])
+                client.bots.post(bot_id=bot_id, text=str(botResponse))
+
+            elif len(splitCommandList) == 4:
+                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1], splitCommandList[2], splitCommandList[3]))
+                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[0] + " " + splitCommandList[1] + " " + splitCommandList[2] + " " + splitCommandList[3])
+                client.bots.post(bot_id=bot_id, text=str(botResponse))
+
 
 
 
@@ -215,8 +227,43 @@ class Command:
 
 
 
+    ### input format !compareme @Other User
+    def compareMe(self, user, otherUserFirstName, otherUserLastName, period = "overall"):
+        periodOptions = {
+            "overall": "overall",
+            "week": "7day",
+            "month": "1month",
+            "year": "12month"
+        }
+        if otherUserFirstName[0] == "@":
+            otherUser = otherUserFirstName[1:] + " " + otherUserLastName
+        else:
+            otherUser = otherUserFirstName + " " + otherUserLastName
+        botResponse = "Comparing: " + str(user) + " & " + otherUser + "\r\n"
 
-    #def compareMe(self, otherUser):
+        similarArtistList = LastFm.compareUsersTopArtists(Database.getLastFmUsername(user), Database.getLastFmUsername(otherUser), periodInput= periodOptions[period])
+        similarTracksList = LastFm.compareUsersTopTracks(Database.getLastFmUsername(user), Database.getLastFmUsername(otherUser), periodInput= periodOptions[period])
+        if len(similarArtistList) > 5:
+            similarArtistList = similarArtistList[0:10]
+        if len(similarTracksList) > 5:
+            similarTracksList = similarTracksList[0:10]
+
+        botResponse += "\r\nSIMILAR ARTISTS: \r\n"
+        for artist in similarArtistList:
+            botResponse+= str(artist) + "\r\n"
+
+
+        botResponse += "\r\nSIMILAR TRACKS: \r\n"
+        for track in similarTracksList:
+            botResponse+= str(track) + "\r\n"
+        return botResponse
+
+
+
+
+
+
+
 
 
 
