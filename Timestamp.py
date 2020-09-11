@@ -3,12 +3,8 @@ from time import mktime
 
 
 ### Fetching current time and storing them in variables ###
-currentMinute = datetime.now().minute
-currentHour = datetime.now().hour
-currentDay = datetime.now().day
-currentMonth = datetime.now().month
-currentYear = datetime.now().year
-previousMonth = 0
+
+
 
 
 ### Function finds what the date was for previous day and checks if its the beginning of a month ###
@@ -64,6 +60,12 @@ def fetchTimestamp(year, month, day, hour,minute):
 
 ### Grabs timestamps from 24 hours ago to current time ###
 def twentyFourHours():
+    currentMinute = datetime.now().minute
+    currentHour = datetime.now().hour
+    currentDay = datetime.now().day
+    currentMonth = datetime.now().month
+    currentYear = datetime.now().year
+
     timeStamps = {
         "time_from": 0,
         "time_to": 0,
@@ -75,10 +77,17 @@ def twentyFourHours():
 
 ### Grabs timestamps from pasts hour ###
 def pastThreeHours():
+    currentMinute = datetime.now().minute
+    currentHour = datetime.now().hour
+    currentDay = datetime.now().day
+    currentMonth = datetime.now().month
+    currentYear = datetime.now().year
+
     timeStamps = {
         "time_from": 0,
         "time_to": 0,
     }
+
     timeStamps["time_from"] = fetchTimestamp(currentYear, currentMonth, currentDay, currentHour-3, currentMinute)
     timeStamps["time_to"] = fetchTimestamp(currentYear, currentMonth, currentDay, currentHour, currentMinute)
     return timeStamps
@@ -87,6 +96,12 @@ def pastThreeHours():
 
 ### Grabs timestamps from one year ago (within same hour) ###
 def threeSixFive():
+    currentMinute = datetime.now().minute
+    currentHour = datetime.now().hour
+    currentDay = datetime.now().day
+    currentMonth = datetime.now().month
+    currentYear = datetime.now().year
+
     timeStamps = {
         "time_from": 0,
         "time_to": 0,
