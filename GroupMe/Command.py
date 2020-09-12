@@ -48,25 +48,25 @@ class Command:
         splitCommandList = command.split()
         if splitCommandList[0] in self.commands:
             if len(splitCommandList) == 1:
-                botResponse += str(self.commands[splitCommandList[0]](user))
                 print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[0])
+                botResponse += str(self.commands[splitCommandList[0]](user))
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
                 return botResponse
 
             elif len(splitCommandList) == 2:
-                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1]))
                 print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[0] + " " + splitCommandList[1])
+                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1]))
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
                 return botResponse
 
             elif len(splitCommandList) == 3:
-                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1], splitCommandList[2]))
                 print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[0] + " " + splitCommandList[1] + " " + splitCommandList[2])
+                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1], splitCommandList[2]))
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
 
             elif len(splitCommandList) == 4:
-                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1], splitCommandList[2], splitCommandList[3]))
                 print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[0] + " " + splitCommandList[1] + " " + splitCommandList[2] + " " + splitCommandList[3])
+                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1], splitCommandList[2], splitCommandList[3]))
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
 
 
