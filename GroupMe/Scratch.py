@@ -1,5 +1,6 @@
 import sqlite3
-from LastFm import compareUsersTopArtists, compareUsersTopTracks
+from LastFm import compareUsersTopArtists, lastfm_network, compareUsersTopTracks
+
 
 conn = sqlite3.connect('/Users/joshuareid/Documents/GitHub/SmartBotDatabase/SmartBot.db')
 cur = conn.cursor()
@@ -27,20 +28,21 @@ cur.execute("SELECT username FROM LastFm INNER JOIN GroupMe ON GroupMe.GroupMeID
 list1 = [1,2,3]
 list2 = [1,3,4]
 combined = list(set.intersection(set(list1), set(list2)))
-print(combined)
-
-
-comparedArtists = compareUsersTopArtists("bumi_", "carly_mac1", "week")
-for item in comparedArtists:
-    print(item)
-
-print("\r\n \r\n \r\n")
-
-comparedTracks = compareUsersTopTracks("bumi_", "carly_mac1", "week")
-for item in comparedTracks:
-    print(item)
+#print(combined)
 
 
 
 
 
+
+
+#print("\r\n \r\n \r\n")
+
+topTracksList = lastfm_network.get_user("bumi_").get_top_tracks(period = "overall", limit=5)
+for item in topTracksList:
+    similar = item.item.get_similar()
+    tag = item.item.get_top_tags()
+    for track in similar:
+        print(str(item.item.title) + "----Similar Track-----" + str(track.item))
+    for taggable in tag:
+        print(str(item.item.title) + "----Tag---------------" + str(taggable.item))

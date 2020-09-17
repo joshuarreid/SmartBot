@@ -87,7 +87,6 @@ class Command:
                         botResponse += LastFm.playbackTimeUtcToEst(track.playback_date) + "  " + "Unreadable Track"
             return botResponse
 
-
     ### Gives a listed response in format "rank. artist - title"" ###
     def rankFormatedTrackList(self, listOfTracks):
         botResponse = ""
@@ -96,13 +95,13 @@ class Command:
         else:
             rank = 1
             for item in listOfTracks:
-                if len(botResponse) < 900: ### Checking if response is under the 1000 character limit ###
+                if len(botResponse) < 900:  ### Checking if response is under the 1000 character limit ###
                     try:
-                            botResponse += str(rank) + ". " + str(item.item.artist) + " - " + str(item.item.title) + "\r\n"
-                            rank+=1
+                        botResponse += str(rank) + ". " + str(item.item.artist) + " - " + str(item.item.title) + " (" + str(item.weight) + " plays)" + "\r\n"
+                        rank += 1
                     except UnicodeEncodeError:  ### If the track or artist title has non ascii characters ###
-                            botResponse += str(rank) + ". " + "Unreadable Track"
-                            rank+=1
+                        botResponse += str(rank) + ". " + "Unreadable Track" " (" + str(item.weight) + " plays)" + "\r\n"
+                        rank += 1
 
             return botResponse
 
