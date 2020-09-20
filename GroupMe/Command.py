@@ -14,14 +14,14 @@ class Command:
             #"!stop": self.stop,
             "!reboot": self.reboot,
             "!commands": self.listCommands,
-            #"!newuser": self.addNewUser,
             "!musiclastyear": self.playbacksOneYearAgo,
             "!recentlyplayed": self.recentPlaybacks,
             "!toptracks": self.listTopTracks,
             "!topartists": self.listTopArtists,
             "!playcount": self.playbackCount,
             "!nowplaying": self.currentlyPlaying,
-            "!compareme": self.compareMe
+            "!compareme": self.compareMe,
+            "!rank": self.rankPlays()
 
         }
 
@@ -35,7 +35,8 @@ class Command:
             "!topartists": "Top Artists",
             "!playcount": "Total plays",
             "!nowplaying": "Currently playing song",
-            "!compareme": "Compare to other user"
+            "!compareme": "Compare to other user",
+            "!rank": "Not Implimented"
         }
 
 
@@ -220,11 +221,6 @@ class Command:
 
 
 
-    ### TODO ranking scrobbles of users ###
-    #def rankScrobbles(self):
-
-
-
 
     ### input format !compareme @Other User
     def compareMe(self, user, otherUserFirstName, otherUserLastName, period = "overall"):
@@ -259,6 +255,10 @@ class Command:
 
 
 
+    ### TODO rank users scrobbles ###
+    def rankPlays(self):
+        print("IMPLIMENT ME")
+        return
 
 
 
