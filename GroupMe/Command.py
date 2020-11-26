@@ -1,7 +1,7 @@
 from datetime import datetime
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
-import LastFm
+import Statify
 import Database
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
@@ -83,9 +83,9 @@ class Command:
             for track in listOfTracks:
                 if len(botResponse) < 900: ### Checking if response is under the 1000 character limit ###
                     try:
-                        botResponse += LastFm.playbackTimeUtcToEst(track.playback_date) + "  " + str(track.track.artist) + " - " + str(track.track.title) + "\r\n"
+                        botResponse += Statify.playbackTimeUtcToEst(track.playback_date) + "  " + str(track.track.artist) + " - " + str(track.track.title) + "\r\n"
                     except UnicodeEncodeError: ### If the track or artist title has non ascii characters ###
-                        botResponse += LastFm.playbackTimeUtcToEst(track.playback_date) + "  " + "Unreadable Track"
+                        botResponse += Statify.playbackTimeUtcToEst(track.playback_date) + "  " + "Unreadable Track"
             return botResponse
 
     ### Gives a listed response in format "rank. artist - title"" ###
@@ -137,7 +137,7 @@ class Command:
     ### Command lists music that was listened to one year ago ###
     def playbacksOneYearAgo(self, user):
         response = "One Year Ago Tracks: @" + str(user) + "\r\n"
-        trackList = LastFm.oneYearAgoTracks(Database.getLastFmUsername(user))
+        trackList = Statify.oneYearAgoTracks(Database.getLastFmUsername(user))
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
@@ -145,7 +145,7 @@ class Command:
     ### Command lists music from the past 24 hours ###
     def recentPlaybacks(self, user):
         response = "Recently Played Tracks: @" + str(user) + "\r\n"
-        trackList = LastFm.playbackPastDay(Database.getLastFmUsername(user))
+        trackList = Statify.playbackPastDay(Database.getLastFmUsername(user))
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
@@ -160,7 +160,7 @@ class Command:
         }
         botResponse = "Top Tracks: @" + str(user) + "\r\n"
         if period in periodOptions:
-            topTrackList = LastFm.getTopTracks(Database.getLastFmUsername(user), periodOptions[period])
+            topTrackList = Statify.getTopTracks(Database.getLastFmUsername(user), periodOptions[period])
             botResponse += self.rankFormatedTrackList(topTrackList)
         else:
             botResponse = "Try: \r\n"
@@ -179,7 +179,7 @@ class Command:
         }
         botResponse = "Top Artists: @" + str(user) + "\r\n"
         if period in periodOptions:
-            listOfArtists = LastFm.getTopArtist(Database.getLastFmUsername(user), periodOptions[period])
+            listOfArtists = Statify.getTopArtist(Database.getLastFmUsername(user), periodOptions[period])
             if not listOfArtists:
                 botResponse += "None"
             else:
@@ -202,13 +202,13 @@ class Command:
 
 
     def playbackCount(self, user):
-        playBackCount = "Total Scrobbles: @" + str(user) + "\r\n" + str(LastFm.playCount(Database.getLastFmUsername(user)))
+        playBackCount = "Total Scrobbles: @" + str(user) + "\r\n" + str(Statify.playCount(Database.getLastFmUsername(user)))
         return playBackCount
 
 
     def currentlyPlaying(self, user):
         botResponse = "Currently Playing: @" + str(user) + "\r\n"
-        currentlyPlayingTrackList = LastFm.getNowPlaying(Database.getLastFmUsername(user))
+        currentlyPlayingTrackList = Statify.getNowPlaying(Database.getLastFmUsername(user))
         if None in currentlyPlayingTrackList:
             botResponse += "None"
         else:
@@ -236,8 +236,8 @@ class Command:
             otherUser = otherUserFirstName + " " + otherUserLastName
         botResponse = "Comparing: " + str(user) + " & " + otherUser + "\r\n"
 
-        similarArtistList = LastFm.compareUsersTopArtists(Database.getLastFmUsername(user), Database.getLastFmUsername(otherUser), periodInput= periodOptions[period])
-        similarTracksList = LastFm.compareUsersTopTracks(Database.getLastFmUsername(user), Database.getLastFmUsername(otherUser), periodInput= periodOptions[period])
+        similarArtistList = Statify.compareUsersTopArtists(Database.getLastFmUsername(user), Database.getLastFmUsername(otherUser), periodInput= periodOptions[period])
+        similarTracksList = Statify.compareUsersTopTracks(Database.getLastFmUsername(user), Database.getLastFmUsername(otherUser), periodInput= periodOptions[period])
         if len(similarArtistList) > 5:
             similarArtistList = similarArtistList[0:10]
         if len(similarTracksList) > 5:

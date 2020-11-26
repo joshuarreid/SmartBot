@@ -1,6 +1,5 @@
 from datetime import datetime
-from groupy.client import Client
-from Token import groupyToken, groupy_id, bot_id
+from Token import bot_id
 import time
 from GroupMe.Command import Command, client, group
 

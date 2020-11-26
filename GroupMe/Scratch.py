@@ -1,5 +1,6 @@
 import sqlite3
-from LastFm import compareUsersTopArtists, lastfm_network, compareUsersTopTracks
+from Statify import compareUsersTopArtists, lastfm_network, compareUsersTopTracks
+
 
 
 conn = sqlite3.connect('/Users/joshuareid/Documents/GitHub/SmartBotDatabase/SmartBot.db')
@@ -55,7 +56,7 @@ for item in topTracksList:
         print(similarTagOutput)
 
 
-
+client.bots.post(bot_id=bot_id, text=str(botResponse))
 
 
 
