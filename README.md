@@ -5,6 +5,7 @@ This project provides a front-end to my other projects through a GroupMe chatbot
 
 <p align="center">
   <img width="300" src="https://github.com/joshuarreid/SmartBot/blob/master/GroupChat.jpeg" />
+  <img width="300" src="https://github.com/joshuarreid/SmartBot/blob/master/GroupChat2.jpeg" />
 </p>
 
 
