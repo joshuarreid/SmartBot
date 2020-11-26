@@ -1,7 +1,7 @@
 from datetime import datetime
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
-import Statify
+from Statify import Statify
 import Database
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
@@ -202,7 +202,8 @@ class Command:
 
 
     def playbackCount(self, user):
-        playBackCount = "Total Scrobbles: @" + str(user) + "\r\n" + str(Statify.playCount(Database.getLastFmUsername(user)))
+        playBackCount = "Total Scrobbles: @" + str(user) + "\r\n" + str(
+            Statify.playCount(Database.getLastFmUsername(user)))
         return playBackCount
 
 

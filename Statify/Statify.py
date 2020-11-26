@@ -1,6 +1,5 @@
-import pylast
 from Token import lastfm_network
-import Timestamp
+from Statify import Timestamp
 
 
 ### Converts playback time from UTC time zone to EST time zone ####

@@ -1,7 +1,5 @@
 import sqlite3
-from Statify import compareUsersTopArtists, lastfm_network, compareUsersTopTracks
-
-
+from Statify.Statify import lastfm_network
 
 conn = sqlite3.connect('/Users/joshuareid/Documents/GitHub/SmartBotDatabase/SmartBot.db')
 cur = conn.cursor()
