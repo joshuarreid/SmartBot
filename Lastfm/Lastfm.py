@@ -1,5 +1,5 @@
 from Token import lastfm_network
-from Statify import Timestamp
+from Lastfm import Timestamp
 
 
 ### Converts playback time from UTC time zone to EST time zone ####

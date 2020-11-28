@@ -1,7 +1,7 @@
 from datetime import datetime
 from Token import bot_id
 import time
-from GroupMe.Command import Command, client, group
+from Bot.Command_Handler import Command_Handler, client, group
 
 
 class Bot:
@@ -11,7 +11,7 @@ class Bot:
         self.bot_name = name
         self.bot_id = id
         self.recentMessageID = (list(group.messages.list(limit=1)))[0].id
-        self.command = Command()
+        self.command_handler = Command_Handler()
         self.listen()
 
     ### Listens for commands in the chat ###
@@ -23,7 +23,7 @@ class Bot:
                 mostRecentMessage = fetchedMessageList[0]
                 recentMessageContent = mostRecentMessage.text
                 recentMessageUser = mostRecentMessage.name
-                botResponse = self.command.handle_command(recentMessageContent, recentMessageUser)
+                botResponse = self.command_handler.execute(recentMessageContent, recentMessageUser)
                 self.recentMessageID = mostRecentMessage.id
 
                 ### Stop command ###

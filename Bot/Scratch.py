@@ -1,19 +1,19 @@
 import sqlite3
-from Statify.Statify import lastfm_network
+from Lastfm.Lastfm import lastfm_network
 
 conn = sqlite3.connect('/Users/joshuareid/Documents/GitHub/SmartBotDatabase/SmartBot.db')
 cur = conn.cursor()
 
-#cur.execute("INSERT INTO GroupMe VALUES (1, 'Joshua Reid', 1)")
+#cur.execute("INSERT INTO Bot VALUES (1, 'Joshua Reid', 1)")
 #conn.commit()
 
-cur.execute("SELECT GroupMeID FROM GroupMe WHERE name = 'Joshua Reid'")
+cur.execute("SELECT GroupMeID FROM Bot WHERE name = 'Joshua Reid'")
 GroupMeID = cur.fetchone()[0]
-print("GroupMe ID of Joshua Reid: " + str(GroupMeID))
+print("Bot ID of Joshua Reid: " + str(GroupMeID))
 
 def fetchLastFmUsername(user):
     user += "'"
-    fetchGroupMeIDStatement = "SELECT GroupMeID FROM GroupMe WHERE name = '"
+    fetchGroupMeIDStatement = "SELECT GroupMeID FROM Bot WHERE name = '"
     cur.execute(fetchGroupMeIDStatement + user)
     GroupMeID = str(cur.fetchone()[0]) + "'"
 
@@ -23,7 +23,7 @@ def fetchLastFmUsername(user):
     return lastFmUsername
 
 
-cur.execute("SELECT username FROM LastFm INNER JOIN GroupMe ON GroupMe.GroupMeID = LastFm.GroupMeID WHERE GroupMe.name = 'Joshua Reid'")
+cur.execute("SELECT username FROM LastFm INNER JOIN Bot ON Bot.GroupMeID = LastFm.GroupMeID WHERE Bot.name = 'Joshua Reid'")
 #print(cur.fetchall())
 
 #print(combined)
