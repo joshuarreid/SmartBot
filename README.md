@@ -17,8 +17,8 @@ Currently the SmartBot project implements [Statify](https://github.com/joshuarre
 * !compareme *{@user} {week, month, year}* - compares listened to artists and tracks between two users
 * !rank *{week, month, year}* - not implemented yet, but will rank users based on total number of plays within a time interval
 
-## Lazy-Listener Future Implementation
-In the future, I plan to implement lazy-listener's music recommendation algorithm so that SmartBot can recommend songs to users and add them to their spotify playlists.
+## Lazy-Listener and Datafy Implementation
+In the future, I plan to implement lazy-listener's music recommendation algorithm so that SmartBot can recommend songs to users and add them to their spotify playlists. The recommendations will utilize the data in Datafy.
 
 ## Credits
 
