@@ -1,7 +1,7 @@
 import Database
 from Lastfm import Lastfm
 
-
+## TODO swap database with csv/pandas
 class Lastfm:
     def __init__(self):
         self.commands = {
@@ -65,15 +65,6 @@ class Lastfm:
                         rank += 1
 
             return botResponse
-
-    ### Command stops the bot ###
-    # def stop(self, user):
-    # stop = "!stop"
-    # return stop
-
-
-        ### TODO command to add new users to database ###
-        # def addNewUser(self, name, lastFmUsername):
 
         ### Command lists music that was listened to one year ago ###
     def playbacksOneYearAgo(self, user):
