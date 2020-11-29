@@ -2,8 +2,8 @@ from datetime import datetime
 from groupy.client import Client
 from Token import groupyToken, groupy_id, bot_id
 from Bot.Lastfm import Lastfm
-from Lastfm import Lastfm
-import Database
+from Database.Database import Database
+import Database_old
 
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
@@ -26,13 +26,16 @@ class Command_Handler:
         }
 
 
-
+        ### TODO update command descriptions in the class file
         self.Lastfm = Lastfm()
         self.commands.update(self.Lastfm.commands)
         self.commandDescriptions.update(self.Lastfm.commandDescriptions)
 
+        self.database = Database('GroupMe')
+
     ### Function handles each command and creates the correct response ###
-    def execute(self, command, user):
+    def execute(self, command, user, user_id):
+        ### TODO get user_id from groupme api
         botResponse = ""
         if command == "!reboot":
             return "!reboot"
@@ -43,7 +46,7 @@ class Command_Handler:
                 print(
                     str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[
                         0])
-                botResponse += str(self.commands[splitCommandList[0]](user))
+                botResponse += str(self.commands[splitCommandList[0]](user_id))
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
                 return botResponse
 
@@ -51,7 +54,7 @@ class Command_Handler:
                 print(
                     str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[
                         0] + " " + splitCommandList[1])
-                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1]))
+                botResponse += str(self.commands[splitCommandList[0]](user_id, splitCommandList[1]))
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
                 return botResponse
 
@@ -59,14 +62,14 @@ class Command_Handler:
                 print(
                     str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[
                         0] + " " + splitCommandList[1] + " " + splitCommandList[2])
-                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1], splitCommandList[2]))
+                botResponse += str(self.commands[splitCommandList[0]](user_id, splitCommandList[1], splitCommandList[2]))
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
 
             elif len(splitCommandList) == 4:
                 print(
                     str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[
                         0] + " " + splitCommandList[1] + " " + splitCommandList[2] + " " + splitCommandList[3])
-                botResponse += str(self.commands[splitCommandList[0]](user, splitCommandList[1], splitCommandList[2],
+                botResponse += str(self.commands[splitCommandList[0]](user_id, splitCommandList[1], splitCommandList[2],
                                                                       splitCommandList[3]))
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
 

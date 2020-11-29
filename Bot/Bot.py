@@ -14,6 +14,7 @@ class Bot:
         self.command_handler = Command_Handler()
         self.listen()
 
+
     ### Listens for commands in the chat ###
     def listen(self):
         while True:
@@ -21,9 +22,7 @@ class Bot:
             fetchedMessageList = list(group.messages.list_after(message_id=self.recentMessageID))
             if len(fetchedMessageList) != 0:
                 mostRecentMessage = fetchedMessageList[0]
-                recentMessageContent = mostRecentMessage.text
-                recentMessageUser = mostRecentMessage.name
-                botResponse = self.command_handler.execute(recentMessageContent, recentMessageUser)
+                botResponse = self.command_handler.execute(mostRecentMessage.text, mostRecentMessage.name, mostRecentMessage.user_id)
                 self.recentMessageID = mostRecentMessage.id
 
                 ### Stop command ###

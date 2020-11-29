@@ -1,5 +1,5 @@
-import Database
-from Lastfm import Lastfm
+from Database.Database import Database
+import LastFmWrapper.LastFmWrapper as pylast
 
 ## TODO swap database with csv/pandas
 class Lastfm:
@@ -27,9 +27,11 @@ class Lastfm:
             "!rank": "Not Implimented"
         }
 
+        self.database = Database('LastFm')
 
 
-
+    def getUsername(self, user_id):
+        return self.database.df.loc[self.database.df['GroupMeID'] == str(user_id)]['username'][0]
 
     ### Gives a listed response in format "hr:minAM/PM  artist - title" ###
     def timeFormatedTrackList(self, listOfTracks):
@@ -68,11 +70,12 @@ class Lastfm:
 
         ### Command lists music that was listened to one year ago ###
     def playbacksOneYearAgo(self, user):
-        response = "One Year Ago Tracks: @" + str(user) + "\r\n"
-        trackList = Lastfm.oneYearAgoTracks(Database.getLastFmUsername(user))
+        response = "One Year Ago Tracks: @" + str(self.getUsername(user)) + "\r\n"
+        trackList = pylast.oneYearAgoTracks(self.getUsername(user))
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
+    ### TODO IMPLEMENT DF
     ### Command lists music from the past 24 hours ###
     def recentPlaybacks(self, user):
         response = "Recently Played Tracks: @" + str(user) + "\r\n"
