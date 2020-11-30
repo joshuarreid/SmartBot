@@ -75,11 +75,10 @@ class Lastfm:
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
-    ### TODO IMPLEMENT DF
     ### Command lists music from the past 24 hours ###
     def recentPlaybacks(self, user):
-        response = "Recently Played Tracks: @" + str(user) + "\r\n"
-        trackList = Lastfm.playbackPastDay(Database.getLastFmUsername(user))
+        response = "Recently Played Tracks: @" + str(self.getUsername(user)) + "\r\n"
+        trackList = pylast.playbackPastDay(self.getUsername(user))
         response += str(self.timeFormatedTrackList(trackList))
         return response
 
@@ -91,9 +90,9 @@ class Lastfm:
             "month": "1month",
             "year": "12month"
         }
-        botResponse = "Top Tracks: @" + str(user) + "\r\n"
+        botResponse = "Top Tracks: @" + str(self.getUsername(user)) + "\r\n"
         if period in periodOptions:
-            topTrackList = Lastfm.getTopTracks(Database.getLastFmUsername(user), periodOptions[period])
+            topTrackList = pylast.getTopTracks(self.getUsername(user), periodOptions[period])
             botResponse += self.rankFormatedTrackList(topTrackList)
         else:
             botResponse = "Try: \r\n"
@@ -109,9 +108,9 @@ class Lastfm:
             "month": "1month",
             "year": "12month"
         }
-        botResponse = "Top Artists: @" + str(user) + "\r\n"
+        botResponse = "Top Artists: @" + str(self.getUsername(user)) + "\r\n"
         if period in periodOptions:
-            listOfArtists = Lastfm.getTopArtist(Database.getLastFmUsername(user), periodOptions[period])
+            listOfArtists = pylast.getTopArtist(self.getUsername(user), periodOptions[period])
             if not listOfArtists:
                 botResponse += "None"
             else:
@@ -133,13 +132,13 @@ class Lastfm:
         return botResponse
 
     def playbackCount(self, user):
-        playBackCount = "Total Scrobbles: @" + str(user) + "\r\n" + str(
-            Lastfm.playCount(Database.getLastFmUsername(user)))
+        playBackCount = "Total Scrobbles: @" + str(self.getUsername(user)) + "\r\n" + str(
+            pylast.playCount(self.getUsername(user)))
         return playBackCount
 
     def currentlyPlaying(self, user):
-        botResponse = "Currently Playing: @" + str(user) + "\r\n"
-        currentlyPlayingTrackList = Lastfm.getNowPlaying(Database.getLastFmUsername(user))
+        botResponse = "Currently Playing: @" + str(self.getUsername(user)) + "\r\n"
+        currentlyPlayingTrackList = pylast.getNowPlaying(self.getUsername(user))
         if None in currentlyPlayingTrackList:
             botResponse += "None"
         else:
@@ -162,13 +161,13 @@ class Lastfm:
             otherUser = otherUserFirstName[1:] + " " + otherUserLastName
         else:
             otherUser = otherUserFirstName + " " + otherUserLastName
-        botResponse = "Comparing: " + str(user) + " & " + otherUser + "\r\n"
+        botResponse = "Comparing: " + str(self.getUsername(user)) + " & " + str(self.getUsername(otherUser)) + "\r\n"
 
-        similarArtistList = Lastfm.compareUsersTopArtists(Database.getLastFmUsername(user),
-                                                          Database.getLastFmUsername(otherUser),
+        similarArtistList = pylast.compareUsersTopArtists(self.getUsername(user),
+                                                          self.getUsername(otherUser),
                                                           periodInput=periodOptions[period])
-        similarTracksList = Lastfm.compareUsersTopTracks(Database.getLastFmUsername(user),
-                                                         Database.getLastFmUsername(otherUser),
+        similarTracksList = pylast.compareUsersTopTracks(self.getUsername(user),
+                                                         self.getUsername(otherUser),
                                                          periodInput=periodOptions[period])
         if len(similarArtistList) > 5:
             similarArtistList = similarArtistList[0:10]
