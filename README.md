@@ -7,6 +7,15 @@ This project provides a front-end to my other projects through a GroupMe chatbot
   <img width="300" src="https://github.com/joshuarreid/SmartBot/blob/master/SmartBot.gif" />
 </p>
 
+## Bot 
+
+### Bot.py
+The bot class is what the main program calls. It listens to the messages in the groupchat waiting for a command to be called.
+
+#### Methods
+
+
+
 ## LastFm API Wrapper Implementation
 Currently the SmartBot project implements [Statify](https://github.com/joshuarreid/Statify) to give some Last.Fm functionality. The current **commands** that utilize Statify are:
 * !musiclastyear - fetches the tracks the user listened to within the same hour one year ago.
