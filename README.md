@@ -7,22 +7,8 @@ This project provides a front-end to my other projects through a GroupMe chatbot
   <img width="300" src="https://github.com/joshuarreid/SmartBot/blob/master/SmartBot.gif" />
 </p>
 
-## Documentation
-
-### Bot
-
-#### Bot.py
-The bot class is what the main program calls. It listens to the messages in the groupchat waiting for a command to be called.
-
-##### Methods
-
-* listen(self)
-** Listens for commands in the chat by retrieving the message after the most previous one. After it refreshes (2 second intervals), if a new message is sent in the groupchat it checks if there is a !{command} present. If a command is present inside the message, it calls the command handler to execute the command.
-
-
-
 ## LastFm API Wrapper Implementation
-Currently the SmartBot project implements [Statify](https://github.com/joshuarreid/Statify) to give some Last.Fm functionality. The current **commands** that utilize Statify are:
+Currently the SmartBot project implements my [LastFm-API-Wrapper](https://github.com/joshuarreid/LastFm-API-Wrapper) to give some Last.Fm functionality. The current **commands** that utilize LastFm-API-Wrapper are:
 * !musiclastyear - fetches the tracks the user listened to within the same hour one year ago.
 * !recentlyplayed - fetches the tracks the user listened to in the past 24 hours.
 * !toptracks *{week, month, year}* - fetches the users most played tracks. 
