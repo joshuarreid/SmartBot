@@ -1,7 +1,7 @@
 from Database.Database import Database
 import LastFmWrapper.LastFmWrapper as pylast
 
-## TODO swap database with csv/pandas
+
 class Lastfm:
     def __init__(self):
         self.commands = {
@@ -42,10 +42,10 @@ class Lastfm:
             for track in listOfTracks:
                 if len(botResponse) < 900:  ### Checking if response is under the 1000 character limit ###
                     try:
-                        botResponse += Lastfm.playbackTimeUtcToEst(track.playback_date) + "  " + str(
+                        botResponse += pylast.playbackTimeUtcToEst(track.playback_date) + "  " + str(
                             track.track.artist) + " - " + str(track.track.title) + "\r\n"
                     except UnicodeEncodeError:  ### If the track or artist title has non ascii characters ###
-                        botResponse += Lastfm.playbackTimeUtcToEst(track.playback_date) + "  " + "Unreadable Track"
+                        botResponse += pylast.playbackTimeUtcToEst(track.playback_date) + "  " + "Unreadable Track"
             return botResponse
 
     ### Gives a listed response in format "rank. artist - title"" ###
@@ -101,6 +101,7 @@ class Lastfm:
                 botResponse += "!toptracks {" + item + "}\r\n"
         return botResponse
 
+    ### TODO post picture
     def listTopArtists(self, user, period="overall"):
         periodOptions = {
             "overall": "overall",

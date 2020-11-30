@@ -1,5 +1,6 @@
 from datetime import datetime
 from groupy.client import Client
+from groupy import attachments
 from Token import groupyToken, groupy_id, bot_id
 from Bot.Lastfm import Lastfm
 from Database.Database import Database
@@ -25,17 +26,16 @@ class Command_Handler:
             "!commands": "Lists all commands",
         }
 
+        self.database = Database('GroupMe')
 
-        ### TODO update command descriptions in the class file
+
         self.Lastfm = Lastfm()
         self.commands.update(self.Lastfm.commands)
         self.commandDescriptions.update(self.Lastfm.commandDescriptions)
 
-        self.database = Database('GroupMe')
 
     ### Function handles each command and creates the correct response ###
     def execute(self, command, user, user_id):
-        ### TODO get user_id from groupme api
         botResponse = ""
         if command == "!reboot":
             return "!reboot"
@@ -46,6 +46,7 @@ class Command_Handler:
                 print(
                     str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[
                         0])
+                # TODO mention = attachments.Mentions(loci=[(3,4)], user_ids=[user_id])
                 botResponse += str(self.commands[splitCommandList[0]](user_id))
                 client.bots.post(bot_id=bot_id, text=str(botResponse))
                 return botResponse

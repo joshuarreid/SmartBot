@@ -123,10 +123,7 @@ def utcToEst(time):
     if min < 10:
         min = "0" + str(min)
 
-    if hour >= 12:
-        estTime = str(hour) + ":" + str(min) + "pm"
-    else:
-        estTime = str(hour) + ":" + str(min) + "am"
+    estTime = str(hour) + ":" + str(min)
     return estTime
 
 
