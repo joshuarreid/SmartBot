@@ -22,8 +22,8 @@ In the future, I plan to implement lazy-listener's music recommendation algorith
 
 ## Credits
 
-* Last.Fm API Wrapper - [Pylast](https://github.com/pylast/pylast)
-* GroupMe API Wrapper - [GroupyAPI](https://pypi.org/project/GroupyAPI/)
+* Pylast - [Pylast](https://github.com/pylast/pylast)
+* GroupyAPI - [GroupyAPI](https://pypi.org/project/GroupyAPI/)
 
 
 
