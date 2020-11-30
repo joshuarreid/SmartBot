@@ -1,4 +1,4 @@
-import LastFmWrapper.LastFmWrapper as pylast
+import LastfmAPIWrapper.LastFmWrapper as pylast
 from Database.Database import Database
 
 
