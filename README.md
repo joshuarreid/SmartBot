@@ -7,12 +7,17 @@ This project provides a front-end to my other projects through a GroupMe chatbot
   <img width="300" src="https://github.com/joshuarreid/SmartBot/blob/master/SmartBot.gif" />
 </p>
 
-## Bot 
+## Documentation
 
-### Bot.py
+### Bot
+
+#### Bot.py
 The bot class is what the main program calls. It listens to the messages in the groupchat waiting for a command to be called.
 
-#### Methods
+##### Methods
+
+###### listen(self)
+Listens for commands in the chat by retrieving the message after the most previous one. After it refreshes (2 second intervals), if a new message is sent in the groupchat it checks if there is a !{command} present. If a command is present inside the message, it calls the command handler to execute the command.
 
 
 
