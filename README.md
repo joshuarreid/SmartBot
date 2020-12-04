@@ -4,7 +4,7 @@
 This project provides a front-end to my other projects through a GroupMe chatbot. The chatbot can complete commands through a groupchat. SmartBot currently is running on an AWS EC2 instance.
 
 <p align="center">
-  <img width="300" src="https://github.com/joshuarreid/SmartBot/blob/master/SmartBot.gif" />
+  <img width="300" src="https://github.com/joshuarreid/SmartBot/blob/Develop/Bot/img/SmartBot.gif" />
 </p>
 
 ## LastFm API Wrapper Implementation
