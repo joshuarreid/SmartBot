@@ -15,23 +15,19 @@ class Lastfm_Commands:
 
     def __init__(self):
         self.commands = {
-            "!musiclastyear": self.list_playbacks_year_ago,
-            "!recentlyplayed": self.list_playbacks_24hours,
+            "!playbacks": self.list_playbacks,
             "!toptracks": self.list_top_tracks,
             "!topartists": self.list_top_artists,
             "!playcount": self.get_playback_count,
-            "!nowplaying": self.get_currently_playing,
             "!compareme": self.compareMe,
             "!rank": self.rankPlays()
         }
 
         self.commandDescriptions = {
-            "!musiclastyear": "Tracks 1 year ago",
-            "!recentlyplayed": "Recent Tracks (24hrs)",
+            "!playbacks": "1year, recents, now",
             "!toptracks": "Top Tracks",
             "!topartists": "Top Artists",
             "!playcount": "Total plays",
-            "!nowplaying": "Currently playing song",
             "!compareme": "Compare to other user",
             "!rank": "Not Implimented"
         }
@@ -108,33 +104,39 @@ class Lastfm_Commands:
     #  list_playbacks(self, user, period)
     #  combines all playback functions
 
-    def list_playbacks_year_ago(self, groupme_id):
+    def list_playbacks(self, groupme_id, period="recents"):
         """
-        lists a users playbacks from one year ago
+        lists a users playbacks from one year ago, lists a users playbacks from past 24 hours
 
         :param groupme_id: {Integer} the user's groupme id
         :return: {String} A formatted list of tracks
         """
-        lastfm_username = self.get_username(groupme_id)
-        botResponse = "One Year Ago Tracks: @" + str(lastfm_username) + "\r\n"
-        trackList = pylast.oneYearAgoTracks(lastfm_username)
-        botResponse += str(self.format_by_time(trackList))
-        return botResponse
 
-
-
-    def list_playbacks_24hours(self, groupme_id):
-        """
-        lists a users playbacks from past 24 hours
-
-        :param groupme_id: {Integer} the user's groupme id
-        :return: {String} A formatted list of tracks
-        """
-        lastfm_username = self.get_username(groupme_id)
-        botResponse = "Recently Played Tracks: @" + str(lastfm_username) + "\r\n"
-        trackList = pylast.playbackPastDay(lastfm_username)
-        botResponse += str(self.format_by_time(trackList))
-        return botResponse
+        if period == "1year": # One year ago Tracks
+            lastfm_username = self.get_username(groupme_id)
+            botResponse = "One Year Ago Tracks: @" + str(lastfm_username) + "\r\n"
+            trackList = pylast.oneYearAgoTracks(lastfm_username)
+            botResponse += str(self.format_by_time(trackList))
+            return botResponse
+        elif period == "recents": # Past twenty-four hours
+            lastfm_username = self.get_username(groupme_id)
+            botResponse = "Recently Played Tracks: @" + str(lastfm_username) + "\r\n"
+            trackList = pylast.playbackPastDay(lastfm_username)
+            botResponse += str(self.format_by_time(trackList))
+            return botResponse
+        elif period == "now": # Currently Playing
+            lastfm_username = self.get_username(groupme_id)
+            botResponse = "Currently Playing: @" + str(lastfm_username) + "\r\n"
+            currentlyPlayingTrackList = pylast.getNowPlaying(lastfm_username)
+            if None in currentlyPlayingTrackList:
+                botResponse += "None"
+            else:
+                for track in currentlyPlayingTrackList:
+                    try:
+                        botResponse += str(track.artist) + " - " + str(track.title)
+                    except UnicodeEncodeError:
+                        botResponse += "Unreadable Track"
+            return botResponse
 
 
 
@@ -219,28 +221,6 @@ class Lastfm_Commands:
         playbackCount = "Total Scrobbles: @" + str(lastfm_username) + "\r\n" + str(
             pylast.playCount(lastfm_username))
         return playbackCount
-
-
-
-    def get_currently_playing(self, groupme_id):
-        """
-        fetches and returns a users currently playing song
-
-        :param groupme_id: {Integer} the user's groupme id
-        :return: {String} the user's currently playing song
-        """
-        lastfm_username = self.get_username(groupme_id)
-        botResponse = "Currently Playing: @" + str(lastfm_username) + "\r\n"
-        currentlyPlayingTrackList = pylast.getNowPlaying(lastfm_username)
-        if None in currentlyPlayingTrackList:
-            botResponse += "None"
-        else:
-            for track in currentlyPlayingTrackList:
-                try:
-                    botResponse += str(track.artist) + " - " + str(track.title)
-                except UnicodeEncodeError:
-                    botResponse += "Unreadable Track"
-        return botResponse
 
 
 

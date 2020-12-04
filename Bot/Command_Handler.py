@@ -36,7 +36,14 @@ class Command_Handler:
         self.commands.update(self.Lastfm.commands)
         self.commandDescriptions.update(self.Lastfm.commandDescriptions)
 
-
+    def get_user_permissions(self, groupme_id):
+        """
+        Fetches a users command permission
+        :param groupme_id: {Int} user's GroupMe id
+        :return user_permissions: {Int} the users permission value
+        """
+        user_permissions = self.database.df.loc[self.database.df['GroupMeID'] == str(groupme_id)]['permission'].tolist()[0]
+        return user_permissions
 
     def execute(self, command, message_user, groupme_id, message_attachments):
         """
@@ -113,13 +120,16 @@ class Command_Handler:
 
 
 
-    def reboot(self):
+    def reboot(self, groupme_id):
         """
-
+        Restarts the bot
         :return: {String} returns the command !reboot
         """
         reboot = "!reboot"
-        return reboot
+        if self.get_user_permissions(groupme_id) == 1:
+            return reboot
+        else:
+            client.bots.post(bot_id=bot_id, text="You do not have permission to use !reboot")
 
 
 
@@ -130,8 +140,8 @@ class Command_Handler:
         :return: {String} A list of current commands
         """
         botResponse = "Commands:\r\n"
-
         for command in self.commandDescriptions:
             botResponse += "-" + command + ": " + self.commandDescriptions[command] + "\r\n"
 
         return botResponse
+
