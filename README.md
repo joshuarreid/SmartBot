@@ -8,7 +8,8 @@ This project provides a front-end to my other projects through a GroupMe chatbot
 </p>
 
 ## LastFm API Wrapper Implementation
-Currently the SmartBot project implements [LastFm-API-Wrapper](https://github.com/joshuarreid/LastFm-API-Wrapper) to give some Last.Fm functionality. The current **commands** that utilize Statify are:
+Currently the SmartBot project implements my [LastFm-API-Wrapper](https://github.com/joshuarreid/LastFm-API-Wrapper) to give some Last.Fm functionality. The current **commands** that utilize LastFm-API-Wrapper are:
+
 * !musiclastyear - fetches the tracks the user listened to within the same hour one year ago.
 * !recentlyplayed - fetches the tracks the user listened to in the past 24 hours.
 * !toptracks *{week, month, year}* - fetches the users most played tracks. 
@@ -22,8 +23,8 @@ In the future, I plan to implement lazy-listener's music recommendation algorith
 
 ## Credits
 
-* Last.Fm API Wrapper - [Pylast](https://github.com/pylast/pylast)
-* GroupMe API Wrapper - [GroupyAPI](https://pypi.org/project/GroupyAPI/)
+* Pylast - [Pylast](https://github.com/pylast/pylast)
+* GroupyAPI - [GroupyAPI](https://pypi.org/project/GroupyAPI/)
 
 
 
