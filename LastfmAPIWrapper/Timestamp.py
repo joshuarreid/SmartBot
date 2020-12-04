@@ -51,8 +51,9 @@ def previousDate(day, month, year):
 
 
 ### fetches timestamp in EST for a given date ###
-### Doesn't work when time is between 0am and 4am || After removing -4 from hour does it work? ###
-def fetchTimestamp(year, month, day, hour,minute):
+def fetchTimestamp(year, month, day, hour, minute):
+    if hour < 0:
+        hour = 24 + hour
     dt = datetime(year, month, day, hour, minute)
     est = mktime(dt.timetuple())
     return est
@@ -123,10 +124,7 @@ def utcToEst(time):
     if min < 10:
         min = "0" + str(min)
 
-    if hour >= 12:
-        estTime = str(hour) + ":" + str(min) + "pm"
-    else:
-        estTime = str(hour) + ":" + str(min) + "am"
+    estTime = str(hour) + ":" + str(min)
     return estTime
 
 
