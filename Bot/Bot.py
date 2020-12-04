@@ -35,7 +35,7 @@ class Bot:
             if len(fetchedMessageList) != 0:
                 mostRecentMessage = fetchedMessageList[0]
                 botResponse = self.command_handler.execute(mostRecentMessage.text, mostRecentMessage.name,
-                                                           mostRecentMessage.user_id)
+                                                           mostRecentMessage.user_id, mostRecentMessage.attachments)
                 self.recentMessageID = mostRecentMessage.id
 
                 if botResponse == "!reboot":

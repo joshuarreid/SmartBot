@@ -3,6 +3,7 @@ from Bot.Lastfm_Commands import Lastfm_Commands
 from Database.Database import Database
 from Token import bot_id, groupyToken, groupy_id
 from groupy.client import Client
+from groupy.api.attachments import Mentions
 
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
@@ -37,7 +38,7 @@ class Command_Handler:
 
 
 
-    def execute(self, command, user, groupme_id):
+    def execute(self, command, message_user, groupme_id, message_attachments):
         """
         Executes commands by accessing the command list which links the !{command}
         keyword with their given methods. It parses the contents of the message
@@ -46,48 +47,69 @@ class Command_Handler:
 
 
         :param command:  {String} the message content containing the !{command}
-        :param user:  {String} the name of the user who sent the message
+        :param message_user:  {String} the name of the user who sent the message
         :param groupme_id: {Integer} the user's groupme id
+        :param message_attachments: {list} list of attachment objects
         :return: None
         """
         botResponse = ""
         if command == "!reboot":
             return "!reboot"
 
+        command = command.lower()
         splitCommandList = command.split()
+
         if splitCommandList[0] in self.commands:
-            if len(splitCommandList) == 1:
-                print(
-                    str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[
-                        0])
-                # TODO mention = attachments.Mentions(loci=[(3,4)], user_ids=[user_id])
-                botResponse += str(self.commands[splitCommandList[0]](groupme_id))
-                client.bots.post(bot_id=bot_id, text=str(botResponse))
-                return botResponse
+            if message_attachments: ## If command contains an attachment
+                if type(message_attachments[0]) is Mentions: # if attachment is a mention
+                    other_groupme_id = message_attachments[0].user_ids[0]
+                    if len(splitCommandList) == 3: ## If the there are three parameters - "!compareme @joshua reid"
+                        print(
+                            str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + message_user + ": " +
+                            splitCommandList[
+                                0] + " " + splitCommandList[1])
+                        botResponse += str(self.commands[splitCommandList[0]](groupme_id, other_groupme_id))
+                        mention = Mentions(loci=[[0,len(botResponse)], [0, len(botResponse)]], user_ids=[groupme_id, other_groupme_id])
+                        client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
+                        return botResponse
 
-            elif len(splitCommandList) == 2:
-                print(
-                    str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[
-                        0] + " " + splitCommandList[1])
-                botResponse += str(self.commands[splitCommandList[0]](groupme_id, splitCommandList[1]))
-                client.bots.post(bot_id=bot_id, text=str(botResponse))
-                return botResponse
 
-            elif len(splitCommandList) == 3:
-                print(
-                    str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[
-                        0] + " " + splitCommandList[1] + " " + splitCommandList[2])
-                botResponse += str(
-                    self.commands[splitCommandList[0]](groupme_id, splitCommandList[1], splitCommandList[2]))
-                client.bots.post(bot_id=bot_id, text=str(botResponse))
+            else: # if command does not contain an attachment
+                if len(splitCommandList) == 1:
+                    print(
+                        str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + message_user + ": " + splitCommandList[
+                            0])
+                    botResponse += str(self.commands[splitCommandList[0]](groupme_id))
+                    mention = Mentions(loci=[(0, len(botResponse))], user_ids=[groupme_id])
+                    client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
+                    return botResponse
 
-            elif len(splitCommandList) == 4:
-                print(
-                    str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + user + ": " + splitCommandList[
-                        0] + " " + splitCommandList[1] + " " + splitCommandList[2] + " " + splitCommandList[3])
-                botResponse += str(self.commands[splitCommandList[0]](groupme_id, splitCommandList[1], splitCommandList[2],
-                                                                      splitCommandList[3]))
-                client.bots.post(bot_id=bot_id, text=str(botResponse))
+                elif len(splitCommandList) == 2:
+                    print(
+                        str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + message_user + ": " + splitCommandList[
+                            0] + " " + splitCommandList[1])
+                    botResponse += str(self.commands[splitCommandList[0]](groupme_id, splitCommandList[1]))
+                    mention = Mentions(loci=[(0, len(botResponse))], user_ids=[groupme_id])
+                    client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
+                    return botResponse
+
+                elif len(splitCommandList) == 3:
+                    print(
+                        str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + message_user + ": " + splitCommandList[
+                            0] + " " + splitCommandList[1] + " " + splitCommandList[2])
+                    botResponse += str(
+                        self.commands[splitCommandList[0]](groupme_id, splitCommandList[1], splitCommandList[2]))
+                    mention = Mentions(loci=[(0, len(botResponse))], user_ids=[groupme_id])
+                    client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
+
+                elif len(splitCommandList) == 4:
+                    print(
+                        str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + message_user + ": " + splitCommandList[
+                            0] + " " + splitCommandList[1] + " " + splitCommandList[2] + " " + splitCommandList[3])
+                    botResponse += str(self.commands[splitCommandList[0]](groupme_id, splitCommandList[1], splitCommandList[2],
+                                                                          splitCommandList[3]))
+                    mention = Mentions(loci=[0, len(botResponse)], user_ids=[groupme_id])
+                    client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
 
 
 

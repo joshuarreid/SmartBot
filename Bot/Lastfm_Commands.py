@@ -48,7 +48,7 @@ class Lastfm_Commands:
         :param groupme_id: {Integer} the user's groupme id
         :return lastfm_username: {String} the users lastfm username
         """
-        lastfm_username = self.database.df.loc[self.database.df['GroupMeID'] == str(groupme_id)]['username'][0]
+        lastfm_username = self.database.df.loc[self.database.df['GroupMeID'] == str(groupme_id)]['username'].tolist()[0]
         return lastfm_username
 
 
@@ -246,7 +246,7 @@ class Lastfm_Commands:
 
     ### input format !compareme @Other User
     # TODO document compareme()
-    def compareMe(self, groupme_id, otherUserFirstName, otherUserLastName, period="overall"):
+    def compareMe(self, groupme_id, other_groupme_id, period="overall"):
         """
 
         :param groupme_id:
@@ -255,24 +255,21 @@ class Lastfm_Commands:
         :param period:
         :return:
         """
+
         periodOptions = {
             "overall": "overall",
             "week": "7day",
             "month": "1month",
             "year": "12month"
         }
-        if otherUserFirstName[0] == "@":
-            otherUser = otherUserFirstName[1:] + " " + otherUserLastName
-        else:
-            otherUser = otherUserFirstName + " " + otherUserLastName
         botResponse = "Comparing: " + str(self.get_username(groupme_id)) + " & " + str(
-            self.get_username(otherUser)) + "\r\n" # TODO throws exception: otherUser needs to be a groupme_id
+            self.get_username(other_groupme_id)) + "\r\n" # TODO throws exception: otherUser needs to be a groupme_id
 
         similarArtistList = pylast.compareUsersTopArtists(self.get_username(groupme_id),
-                                                          self.get_username(otherUser),
+                                                          self.get_username(other_groupme_id),
                                                           periodInput=periodOptions[period])
         similarTracksList = pylast.compareUsersTopTracks(self.get_username(groupme_id),
-                                                         self.get_username(otherUser),
+                                                         self.get_username(other_groupme_id),
                                                          periodInput=periodOptions[period])
         if len(similarArtistList) > 5:
             similarArtistList = similarArtistList[0:10]
