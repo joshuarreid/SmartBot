@@ -1,5 +1,7 @@
 import LastfmAPIWrapper.LastFmWrapper as pylast
 from Database.Database import Database
+import Statify.Statify as statify
+
 
 
 class Lastfm_Commands:
@@ -17,10 +19,11 @@ class Lastfm_Commands:
         self.commands = {
             "!playbacks": self.list_playbacks,
             "!toptracks": self.list_top_tracks,
-            "!topartists": self.list_top_artists,
+            "!topartiststext": self.list_top_artists,
+            "!topartists": self.img_top_artists,
             "!playcount": self.get_playback_count,
             "!compareme": self.compareMe,
-            "!rank": self.rankPlays()
+            "!rank": self.rank_plays
         }
 
         self.commandDescriptions = {
@@ -174,7 +177,7 @@ class Lastfm_Commands:
         lists a users top tracks from a given period
 
         :param groupme_id: {Integer} the user's groupme id
-        :param period: {String} time period to fetch top tracks from
+        :param period: {String} time period to fetch top artists from
         :return: {String} A formatted list of top artists
         """
         periodOptions = {
@@ -207,6 +210,26 @@ class Lastfm_Commands:
             for item in periodOptions:
                 botResponse += "!topartists {" + item + "}\r\n"
         return botResponse
+
+    def img_top_artists(self, groupme_id, period="overall"):
+        """
+        lists a users top tracks from a given period and returns an image
+
+        :param groupme_id: {Integer} the user's groupme id
+        :param period: {String} time period to fetch top artists from
+        :return: {Image} a png containing graph of top artists
+        """
+        periodOptions = {
+            "overall": "overall",
+            "week": "7day",
+            "month": "1month",
+            "year": "12month"
+        }
+        lastfm_username = self.get_username(groupme_id)
+        image = statify.graph_top_artists(lastfm_username, periodOptions[period])
+        return image
+
+
 
 
 
@@ -268,5 +291,5 @@ class Lastfm_Commands:
 
 
     ### TODO rank users scrobbles ###
-    def rankPlays(self):
-        return "Implement Me"
+    def rank_plays(self, groupme_id):
+        return "No Implementation"
