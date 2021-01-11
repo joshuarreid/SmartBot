@@ -37,6 +37,10 @@ def getTopTracks(user, periodInput):
         topTracksList = lastfm_network.get_user(user).get_top_tracks(period = periodInput, limit=25)
         return topTracksList
 
+def getTopTracksPeriod(user, time_from, time_to):
+    topTracksList = lastfm_network.get_user(user).get_recent_tracks(time_from, time_to)
+
+
 
 def getTopArtist(user, periodInput):
     topTracksList = lastfm_network.get_user(user).get_top_artists(period=periodInput, limit=25)

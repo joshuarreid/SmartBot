@@ -111,6 +111,21 @@ def threeSixFive():
     timeStamps["time_to"] = fetchTimestamp(currentYear-1, currentMonth, currentDay, currentHour, currentMinute)
     return timeStamps
 
+def todayLastYear():
+    currentMinute = datetime.now().minute
+    currentHour = datetime.now().hour
+    currentDay = datetime.now().day
+    currentMonth = datetime.now().month
+    currentYear = datetime.now().year
+    timeStamps = {
+        "time_from": 0,
+        "time_to": 0,
+    }
+    timeStamps["time_from"] =fetchTimestamp(currentYear-1, currentMonth, currentDay, 0, 0)
+    timeStamps["time_to"] = fetchTimestamp(currentYear-1, currentMonth, currentDay, 23, 59)
+    return timeStamps
+
+
 ### Converts Hour and Minute to EST from UTC and formats it to "hr:min AM/PM" ###
 ### Format of time: hour:min (Military Time) ###
 def utcToEst(time):

@@ -1,7 +1,7 @@
 import LastfmAPIWrapper.LastFmWrapper as pylast
 from Database.Database import Database
 import Statify.Statify as statify
-
+from LastfmAPIWrapper import Timestamp
 
 
 class Lastfm_Commands:
@@ -23,7 +23,7 @@ class Lastfm_Commands:
             "!topartists": self.img_top_artists,
             "!playcount": self.get_playback_count,
             "!compareme": self.compareMe,
-            "!rank": self.rank_plays
+            "!rewind": self.rewind
         }
 
         self.commandDescriptions = {
@@ -103,10 +103,6 @@ class Lastfm_Commands:
 
 
 
-    # TODO create list_playbacks()
-    #  list_playbacks(self, user, period)
-    #  combines all playback functions
-
     def list_playbacks(self, groupme_id, period="recents"):
         """
         lists a users playbacks from one year ago, lists a users playbacks from past 24 hours
@@ -115,19 +111,19 @@ class Lastfm_Commands:
         :return: {String} A formatted list of tracks
         """
 
-        if period == "1year": # One year ago Tracks
+        if period == "1year":  # One year ago Tracks
             lastfm_username = self.get_username(groupme_id)
             botResponse = "One Year Ago Tracks: @" + str(lastfm_username) + "\r\n"
             trackList = pylast.oneYearAgoTracks(lastfm_username)
             botResponse += str(self.format_by_time(trackList))
             return botResponse
-        elif period == "recents": # Past twenty-four hours
+        elif period == "recents":  # Past twenty-four hours
             lastfm_username = self.get_username(groupme_id)
             botResponse = "Recently Played Tracks: @" + str(lastfm_username) + "\r\n"
             trackList = pylast.playbackPastDay(lastfm_username)
             botResponse += str(self.format_by_time(trackList))
             return botResponse
-        elif period == "now": # Currently Playing
+        elif period == "now":  # Currently Playing
             lastfm_username = self.get_username(groupme_id)
             botResponse = "Currently Playing: @" + str(lastfm_username) + "\r\n"
             currentlyPlayingTrackList = pylast.getNowPlaying(lastfm_username)
@@ -171,7 +167,6 @@ class Lastfm_Commands:
 
 
 
-    ### TODO post picture of top artists
     def list_top_artists(self, groupme_id, period="overall"):
         """
         lists a users top tracks from a given period
@@ -211,6 +206,8 @@ class Lastfm_Commands:
                 botResponse += "!topartists {" + item + "}\r\n"
         return botResponse
 
+
+
     def img_top_artists(self, groupme_id, period="overall"):
         """
         lists a users top tracks from a given period and returns an image
@@ -231,8 +228,6 @@ class Lastfm_Commands:
 
 
 
-
-
     def get_playback_count(self, groupme_id):
         """
         fetches and returns a users total number of playbacks
@@ -247,16 +242,15 @@ class Lastfm_Commands:
 
 
 
-    ### input format !compareme @Other User
-    # TODO document compareme()
     def compareMe(self, groupme_id, other_groupme_id, period="overall"):
         """
+        compares two users' top tracks and top artists by finding the inner intersection
+        of their top tracks and artists
 
-        :param groupme_id:
-        :param otherUserFirstName:
-        :param otherUserLastName:
-        :param period:
-        :return:
+        :param groupme_id: {Integer} the user's groupme id
+        :param other_groupme_id: {Integer} another user's groupme id
+        :param period: {String} time period to fetch top artists from
+        :return: {String} formatted list of both user's top artists and tracks
         """
 
         periodOptions = {
@@ -266,7 +260,7 @@ class Lastfm_Commands:
             "year": "12month"
         }
         botResponse = "Comparing: " + str(self.get_username(groupme_id)) + " & " + str(
-            self.get_username(other_groupme_id)) + "\r\n" # TODO throws exception: otherUser needs to be a groupme_id
+            self.get_username(other_groupme_id)) + "\r\n"
 
         similarArtistList = pylast.compareUsersTopArtists(self.get_username(groupme_id),
                                                           self.get_username(other_groupme_id),
@@ -290,6 +284,14 @@ class Lastfm_Commands:
 
 
 
-    ### TODO rank users scrobbles ###
-    def rank_plays(self, groupme_id):
-        return "No Implementation"
+    # TODO !rewind
+    def rewind(self, groupme_id):
+        lastfm_username = self.get_username(groupme_id)
+        botResponse = "Rewind: @" + str(lastfm_username) + "\r\n \r\n"
+        trackList = pylast.oneYearAgoTracks(lastfm_username)
+        toptrackslastyear = pylast.getTopTracksPeriod(lastfm_username, Timestamp.todayLastYear()['time_from'], Timestamp.todayLastYear()['time_to'])
+        #TODO get the top tracks from this day last year
+        botResponse += str(self.format_by_time(trackList))
+        return botResponse
+
+
