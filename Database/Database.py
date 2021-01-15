@@ -3,10 +3,10 @@ import sqlite3 as sql
 from Token import databaseLocation
 
 class Database:
-    """The LastfmAPIWrapper Class
+    """The Database Class
 
-    The LastfmAPIWrapper class contains all the commands their methods for the
-    interacting with a Sqlite3 database through the pandas library.
+    The Database class is responsible for connecting each command library with its
+    database table.
 
     """
     def __init__(self, database_name):

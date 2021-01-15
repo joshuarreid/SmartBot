@@ -1,7 +1,11 @@
 import time
 from datetime import datetime
-from Bot.Command_Handler import Command_Handler, client, group
-from Token import bot_id
+from Token import bot_id, groupyToken, groupy_id
+from groupy.client import Client
+from Bot.Command_Handler import Command_Handler
+
+client = Client.from_token(groupyToken)
+group = client.groups.get(groupy_id)
 
 
 class Bot:
@@ -18,11 +22,11 @@ class Bot:
         self.bot_id = id
         self.recentMessageID = (list(group.messages.list(limit=1)))[0].id
         self.command_handler = Command_Handler()
-        self.listen()
+        self.run()
 
 
 
-    def listen(self):
+    def run(self):
         """
         Listens for commands in the chat by retrieving the message after the most previous one. After
         it refreshes (2 second intervals), if a new message is sent in the groupchat it checks if
@@ -30,6 +34,9 @@ class Bot:
         command handler to execute the command.
         """
         while True:
+            """
+            The bot listening for new messages.
+            """
             fetchedMessageList = []
             fetchedMessageList = list(group.messages.list_after(message_id=self.recentMessageID))
             if len(fetchedMessageList) != 0:

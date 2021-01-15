@@ -3,7 +3,7 @@ from Bot.Lastfm_Commands import Lastfm_Commands
 from Database.Database import Database
 from Token import bot_id, groupyToken, groupy_id
 from groupy.client import Client
-from groupy.api.attachments import Mentions
+from groupy.api.attachments import Mentions, Image
 
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
@@ -35,8 +35,27 @@ class Command_Handler:
         self.Lastfm = Lastfm_Commands()
         self.commands.update(self.Lastfm.commands)
         self.commandDescriptions.update(self.Lastfm.commandDescriptions)
+        self.client = Client.from_token(groupyToken)
 
+    def get_member_ids(self):
+        """
+        Fetches the groupme_ids of all of the members in the group
+        :return member_ids: {list} member ids
+        """
+        members = client.groups.get(57087652).members
+        member_ids =[]
+        for member in members:
+            member_ids = member.user_id
+        return member_ids
 
+    def get_user_permissions(self, groupme_id):
+        """
+        Fetches a users command permission
+        :param groupme_id: {Int} user's GroupMe id
+        :return user_permissions: {Int} the users permission value
+        """
+        user_permissions = self.database.df.loc[self.database.df['GroupMeID'] == str(groupme_id)]['permission'].tolist()[0]
+        return user_permissions
 
     def execute(self, command, message_user, groupme_id, message_attachments):
         """
@@ -62,6 +81,7 @@ class Command_Handler:
         if splitCommandList[0] in self.commands:
             if message_attachments: ## If command contains an attachment
                 if type(message_attachments[0]) is Mentions: # if attachment is a mention
+                    print("NOOO")
                     other_groupme_id = message_attachments[0].user_ids[0]
                     if len(splitCommandList) == 3: ## If the there are three parameters - "!compareme @joshua reid"
                         print(
@@ -74,24 +94,33 @@ class Command_Handler:
                         return botResponse
 
 
+
             else: # if command does not contain an attachment
                 if len(splitCommandList) == 1:
                     print(
                         str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + message_user + ": " + splitCommandList[
                             0])
-                    botResponse += str(self.commands[splitCommandList[0]](groupme_id))
-                    mention = Mentions(loci=[(0, len(botResponse))], user_ids=[groupme_id])
-                    client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
-                    return botResponse
+                    response = self.commands[splitCommandList[0]](groupme_id)
+                    if type(response) is str:
+                        botResponse += response
+                        mention = Mentions(loci=[(0, len(botResponse))], user_ids=[groupme_id])
+                        client.bots.post(bot_id=bot_id, text=botResponse, attachments=[mention])
+                    elif type(response) is Image:
+                        client.bots.post(bot_id=bot_id, text=splitCommandList[0][1:], attachments=[response])
+
+
 
                 elif len(splitCommandList) == 2:
                     print(
                         str(datetime.now().hour) + ":" + str(datetime.now().minute) + " " + message_user + ": " + splitCommandList[
                             0] + " " + splitCommandList[1])
-                    botResponse += str(self.commands[splitCommandList[0]](groupme_id, splitCommandList[1]))
-                    mention = Mentions(loci=[(0, len(botResponse))], user_ids=[groupme_id])
-                    client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
-                    return botResponse
+                    response = self.commands[splitCommandList[0]](groupme_id, splitCommandList[1])
+                    if type(response) is str:
+                        botResponse += response
+                        mention = Mentions(loci=[(0, len(botResponse))], user_ids=[groupme_id])
+                        client.bots.post(bot_id=bot_id, text=botResponse, attachments=[mention])
+                    elif type(response) is Image:
+                        client.bots.post(bot_id=bot_id, text=splitCommandList[0][1:], attachments=[response])
 
                 elif len(splitCommandList) == 3:
                     print(
@@ -113,13 +142,16 @@ class Command_Handler:
 
 
 
-    def reboot(self):
+    def reboot(self, groupme_id):
         """
-
+        Restarts the bot
         :return: {String} returns the command !reboot
         """
         reboot = "!reboot"
-        return reboot
+        if self.get_user_permissions(groupme_id) == 1:
+            return reboot
+        else:
+            client.bots.post(bot_id=bot_id, text="You do not have permission to use !reboot")
 
 
 
@@ -130,8 +162,8 @@ class Command_Handler:
         :return: {String} A list of current commands
         """
         botResponse = "Commands:\r\n"
-
         for command in self.commandDescriptions:
             botResponse += "-" + command + ": " + self.commandDescriptions[command] + "\r\n"
 
         return botResponse
+
