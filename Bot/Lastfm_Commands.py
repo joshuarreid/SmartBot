@@ -19,7 +19,7 @@ class Lastfm_Commands:
         self.commands = {
             "!playbacks": self.list_playbacks,
             "!toptracks": self.list_top_tracks,
-            "!topartiststext": self.list_top_artists,
+            "!topartiststext": self.list_top_artists, #TODO command now showing up in !commands
             "!topartists": self.img_top_artists,
             "!playcount": self.get_playback_count,
             "!compareme": self.compareMe,
