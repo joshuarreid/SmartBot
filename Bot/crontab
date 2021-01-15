@@ -1,0 +1,5 @@
+Everyday at 12:58am ec2 instance reboots
+Everyday at 1:00am SmartBot script starts up
+
+58 0 * * * sudo reboot
+0 1 * * * /usr/bin/python3 /home/ubuntu/SmartBot/__main__.py
