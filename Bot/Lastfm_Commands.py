@@ -113,19 +113,19 @@ class Lastfm_Commands:
 
         if period == "1year":  # One year ago Tracks
             lastfm_username = self.get_username(groupme_id)
-            botResponse = "One Year Ago Tracks: @" + str(lastfm_username) + "\r\n"
+            botResponse = "One Year Ago Tracks: @" + str(lastfm_username).title() + "\r\n"
             trackList = pylast.oneYearAgoTracks(lastfm_username)
             botResponse += str(self.format_by_time(trackList))
             return botResponse
         elif period == "recents":  # Past twenty-four hours
             lastfm_username = self.get_username(groupme_id)
-            botResponse = "Recently Played Tracks: @" + str(lastfm_username) + "\r\n"
+            botResponse = "Recently Played Tracks: @" + str(lastfm_username).title() + "\r\n"
             trackList = pylast.playbackPastDay(lastfm_username)
             botResponse += str(self.format_by_time(trackList))
             return botResponse
         elif period == "now":  # Currently Playing
             lastfm_username = self.get_username(groupme_id)
-            botResponse = "Currently Playing: @" + str(lastfm_username) + "\r\n"
+            botResponse = "Currently Playing: @" + str(lastfm_username).title() + "\r\n"
             currentlyPlayingTrackList = pylast.getNowPlaying(lastfm_username)
             if None in currentlyPlayingTrackList:
                 botResponse += "None"
@@ -155,7 +155,7 @@ class Lastfm_Commands:
         }
 
         lastfm_username = self.get_username(groupme_id)
-        botResponse = "Top Tracks: @" + str(lastfm_username) + "\r\n"
+        botResponse = "Top Tracks " + period.title() + ": @" + str(lastfm_username).title() + "\r\n"
         if period in periodOptions:
             topTrackList = pylast.getTopTracks(lastfm_username, periodOptions[period])
             botResponse += self.format_by_rank(topTrackList)
@@ -183,7 +183,7 @@ class Lastfm_Commands:
         }
 
         lastfm_username = self.get_username(groupme_id)
-        botResponse = "Top Artists: @" + str(lastfm_username) + "\r\n"
+        botResponse = "Top Artists " + period.title() + ": @" + str(lastfm_username).title() + "\r\n"
         if period in periodOptions:
             listOfArtists = pylast.getTopArtist(lastfm_username, periodOptions[period])
             if not listOfArtists:
@@ -236,7 +236,7 @@ class Lastfm_Commands:
         :return: {String} the user's total number of playbacks
         """
         lastfm_username = self.get_username(groupme_id)
-        playbackCount = "Total Scrobbles: @" + str(lastfm_username) + "\r\n" + str(
+        playbackCount = "Total Scrobbles: @" + str(lastfm_username).title() + "\r\n" + str(
             pylast.playCount(lastfm_username))
         return playbackCount
 
@@ -259,8 +259,8 @@ class Lastfm_Commands:
             "month": "1month",
             "year": "12month"
         }
-        botResponse = "Comparing: " + str(self.get_username(groupme_id)) + " & " + str(
-            self.get_username(other_groupme_id)) + "\r\n"
+        botResponse = "Comparing: " + str(self.get_username(groupme_id)).title() + " & " + str(
+            self.get_username(other_groupme_id)).title() + "\r\n"
 
         similarArtistList = pylast.compareUsersTopArtists(self.get_username(groupme_id),
                                                           self.get_username(other_groupme_id),
@@ -286,12 +286,6 @@ class Lastfm_Commands:
 
     # TODO !rewind
     def rewind(self, groupme_id):
-        lastfm_username = self.get_username(groupme_id)
-        botResponse = "Rewind: @" + str(lastfm_username) + "\r\n \r\n"
-        trackList = pylast.oneYearAgoTracks(lastfm_username)
-        toptrackslastyear = pylast.getTopTracksPeriod(lastfm_username, Timestamp.todayLastYear()['time_from'], Timestamp.todayLastYear()['time_to'])
-        #TODO get the top tracks from this day last year
-        botResponse += str(self.format_by_time(trackList))
-        return botResponse
+        return "Not Implemented Yet!"
 
 

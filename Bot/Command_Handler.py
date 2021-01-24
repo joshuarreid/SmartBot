@@ -45,7 +45,7 @@ class Command_Handler:
         members = client.groups.get(57087652).members
         member_ids =[]
         for member in members:
-            member_ids = member.user_id
+            member_ids += member.user_id
         return member_ids
 
     def get_user_permissions(self, groupme_id):
@@ -57,7 +57,7 @@ class Command_Handler:
         user_permissions = self.database.df.loc[self.database.df['GroupMeID'] == str(groupme_id)]['permission'].tolist()[0]
         return user_permissions
 
-    def execute(self, command, message_user, groupme_id, message_attachments):
+    def execute(self, command, message_user, groupme_id, message_attachments=None):
         """
         Executes commands by accessing the command list which links the !{command}
         keyword with their given methods. It parses the contents of the message
@@ -81,7 +81,6 @@ class Command_Handler:
         if splitCommandList[0] in self.commands:
             if message_attachments: ## If command contains an attachment
                 if type(message_attachments[0]) is Mentions: # if attachment is a mention
-                    print("NOOO")
                     other_groupme_id = message_attachments[0].user_ids[0]
                     if len(splitCommandList) == 3: ## If the there are three parameters - "!compareme @joshua reid"
                         print(
