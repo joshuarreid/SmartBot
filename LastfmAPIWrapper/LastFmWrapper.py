@@ -1,6 +1,7 @@
 from Token import lastfm_network
 from LastfmAPIWrapper import Timestamp
 
+#TODO fix this god damn mess
 
 ### Converts playback time from UTC time zone to EST time zone ####
 def playbackTimeUtcToEst(utcTime):
@@ -10,6 +11,7 @@ def playbackTimeUtcToEst(utcTime):
 ### Grabs played tracks within a time interval ###
 def getTracksTimeInterval(timeFrom, timeTo, user):
     trackList = lastfm_network.get_user(user).get_recent_tracks(cacheable=False, limit=None, time_from=timeFrom, time_to=timeTo)
+    print("time from: " + str(timeFrom) + "\r\n" + "time to: " + str(timeTo))
     return trackList
 
 ### Grabs played tracks from last 24 hours ###

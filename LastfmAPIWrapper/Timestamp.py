@@ -5,7 +5,7 @@ from time import mktime
 ### Fetching current time and storing them in variables ###
 
 
-
+#TODO fix this god damn mess
 
 ### Function finds what the date was for previous day and checks if its the beginning of a month ###
 ### add timestamp into daysInMonth dictionary ###

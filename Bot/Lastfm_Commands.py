@@ -223,8 +223,14 @@ class Lastfm_Commands:
             "year": "12month"
         }
         lastfm_username = self.get_username(groupme_id)
-        image = statify.graph_top_artists(lastfm_username, periodOptions[period])
-        return image
+        if period in periodOptions:
+            image = statify.graph_top_artists(lastfm_username, periodOptions[period])
+            return image
+        else:
+            botResponse = "Try: \r\n"
+            for item in periodOptions:
+                botResponse += "!topartists {" + item + "}\r\n"
+            return botResponse
 
 
 
