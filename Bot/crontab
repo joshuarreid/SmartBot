@@ -1,0 +1,11 @@
+Everyday every hour at *:58 ec2 instance reboots
+Everyday every hour at *:00 SmartBot script starts up
+
+#view crontab tasks
+crontab -l
+#edit crontab tasks
+crontab -e
+
+
+58 * * * * sudo reboot
+0 * * * * /usr/bin/python3 /home/ubuntu/SmartBot/__main__.py

@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 from Token import bot_id, groupyToken, groupy_id
 from groupy.client import Client
-from Bot.Command_Handler import Command_Handler
+from Bot.GroupmeCommandHandler import GroupmeCommandHandler
 
 client = Client.from_token(groupyToken)
 group = client.groups.get(groupy_id)
@@ -21,7 +21,7 @@ class Bot:
         self.bot_name = name
         self.bot_id = id
         self.recentMessageID = (list(group.messages.list(limit=1)))[0].id
-        self.command_handler = Command_Handler()
+        self.command_handler = GroupmeCommandHandler()
         self.run()
 
 
