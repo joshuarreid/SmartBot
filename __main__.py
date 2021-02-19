@@ -1,5 +1,5 @@
 from Bot.Bot import Bot
-from Bot.Command_Handler import client
+from Bot.GroupmeCommandHandler import client
 from Token import bot_id
 from traceback import format_exc
 from groupy.exceptions import BadResponse
