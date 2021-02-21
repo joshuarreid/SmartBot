@@ -36,6 +36,7 @@ class GroupmeCommandHandler:
         self.commands.update(self.Lastfm.commands)
         self.commandDescriptions.update(self.Lastfm.commandDescriptions)
         self.client = Client.from_token(groupyToken)
+        self.ran_tasks = False
 
     def run_scheduled_tasks(self):
         """
@@ -43,15 +44,13 @@ class GroupmeCommandHandler:
         :return:
         """
         members = self.get_member_ids()
-        if (datetime.today().day == 0 and
-                datetime.today().hour == 10 and
-                datetime.today().min == 0 and
-                (datetime.today().second == 0 or datetime.second == 1)):
-
-            for groupme_id in members:
-                botResponse = str(self.commands["!rewind"](groupme_id=groupme_id))
-                mention = Mentions(loci=[(0, len(botResponse))], user_ids=[groupme_id])
-                client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
+        if (datetime.today().day == 0 and datetime.today().hour == 10 and datetime.today().min == 1):
+            if (self.ran_tasks == False):
+                self.ran_tasks = True
+                for groupme_id in members:
+                    botResponse = str(self.commands["!rewind"](groupme_id=groupme_id))
+                    mention = Mentions(loci=[(0, len(botResponse))], user_ids=[groupme_id])
+                    client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
 
 
 
