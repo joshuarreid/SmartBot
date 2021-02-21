@@ -50,4 +50,5 @@ class Bot:
                     print("Bot is rebooting")
                     break
 
+            self.command_handler.run_scheduled_tasks()
             time.sleep(2)
