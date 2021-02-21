@@ -46,7 +46,7 @@ class GroupmeCommandHandler:
         if (datetime.today().day == 0 and
                 datetime.today().hour == 10 and
                 datetime.today().min == 0 and
-                (datetime.today().second == 0 or datetime.second == 1 or datetime.second == 3)):
+                (datetime.today().second == 0 or datetime.second == 1)):
 
             for groupme_id in members:
                 botResponse = str(self.commands["!rewind"](groupme_id=groupme_id))

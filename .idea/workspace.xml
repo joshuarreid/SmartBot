@@ -31,24 +31,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcc5f90e-6484-499c-8901-6fcb65393839" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bot/GroupmeCommandHandler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bot/LastfmCommands.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bot/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bot/tests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bot/tests/test_LastFm_API_Wrapper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bot/tests/test_Statify.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bot/tests/test_commands.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bot/tests/topartists.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LastfmAPIWrapper/LastFmWrapper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LastfmAPIWrapper/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Scratch/Test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Scratch/posting_pictures.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Statify/LastfmCommands.py" afterDir="false" />
+    <list default="true" id="dcc5f90e-6484-499c-8901-6fcb65393839" name="Default Changelist" comment="Fixing Commit Issues">
       <change afterPath="$PROJECT_DIR$/Token.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/__test__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/topartists.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,6 +188,14 @@
       <option name="presentableId" value="Default" />
       <updated>1599067535821</updated>
     </task>
+    <task id="LOCAL-00001" summary="Fixing Commit Issues">
+      <created>1613889046786</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1613889046786</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -230,7 +223,8 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Fixing Commit Issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing Commit Issues" />
   </component>
   <component name="WindowStateProjectService">
     <state x="-791" y="839" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1610679300547">
@@ -373,10 +367,10 @@
     <state x="221" y="105" key="SettingsEditor/0.23.1440.826@0.23.1440.826" timestamp="1606705343055" />
     <state x="439" y="125" key="SettingsEditor/0.23.1920.1004@0.23.1920.1004" timestamp="1608502680668" />
     <state x="458" y="112" key="SettingsEditor/0.25.1440.816@0.25.1440.816" timestamp="1613878969409" />
-    <state x="320" y="170" key="Vcs.Push.Dialog.v2" timestamp="1613889000565">
+    <state x="320" y="170" key="Vcs.Push.Dialog.v2" timestamp="1613889069600">
       <screen x="0" y="25" width="1440" height="816" />
     </state>
-    <state x="320" y="170" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1613889000565" />
+    <state x="320" y="170" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1613889069600" />
     <state width="720" height="408" key="XDebugger.FullValuePopup" timestamp="1613878568106">
       <screen x="0" y="25" width="1440" height="816" />
     </state>
