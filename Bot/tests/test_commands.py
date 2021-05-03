@@ -21,13 +21,6 @@ class TestCommand_Handler(TestCase):
 
 
 
-    def test_get_user_permissions(self):
-        result = command_handler.get_user_permissions(groupme_id=groupme_id)
-        print(result)
-        self.assertEqual(type(result), int)
-
-
-
     def test_execute(self):
         raised = False
         try:
@@ -67,13 +60,11 @@ class TestLastfmCommands(TestCase):
     def test_list_playbacks(self):
         raised = False
         try:
-            print(lastfm_commands.list_playbacks(groupme_id=groupme_id, period="1year"))  # !playbacks 1year
+            print(lastfm_commands.list_playbacks(groupme_id=groupme_id, period="recents"))  # !playbacks 1year
             print(lastfm_commands.list_playbacks(groupme_id=groupme_id, period="now"))  # !playbacks now
-            result = lastfm_commands.list_playbacks(groupme_id=groupme_id)  # !playbacks
-            print(result)
         except:
             raised = True
-        self.fail()
+        self.assertFalse(raised)
 
 
 
@@ -121,18 +112,6 @@ class TestLastfmCommands(TestCase):
             raised = True
         self.assertFalse(raised)
 
-
-
-    def test_compare_me(self):
-        raised = False
-        try:
-            result1 = lastfm_commands.compareMe(groupme_id=groupme_id, other_groupme_id=groupme_id_other)
-            result2 = lastfm_commands.compareMe(groupme_id=groupme_id_other, other_groupme_id=groupme_id)
-            print(result1)
-            print(result2)
-        except:
-            raised = True
-        self.fail()
 
 
 

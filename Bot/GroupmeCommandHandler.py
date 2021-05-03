@@ -20,13 +20,11 @@ class GroupmeCommandHandler:
     """
     def __init__(self):
         self.commands = {
-            "!reboot": self.reboot,
             "!commands": self.list_commands,
 
         }
 
         self.commandDescriptions = {
-            "!reboot": "restarts bot",
             "!commands": "Lists all commands",
         }
 
@@ -53,10 +51,6 @@ class GroupmeCommandHandler:
                     client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
 
 
-
-
-
-
     def get_member_ids(self):
         """
         Fetches the groupme_ids of all of the members in the group
@@ -68,14 +62,6 @@ class GroupmeCommandHandler:
             member_ids.append(member.user_id)
         return member_ids
 
-    def get_user_permissions(self, groupme_id):
-        """
-        Fetches a users command permission
-        :param groupme_id: {Int} user's GroupMe id
-        :return user_permissions: {Int} the users permission value
-        """
-        user_permissions = self.database.df.loc[self.database.df['GroupMeID'] == str(groupme_id)]['permission'].tolist()[0]
-        return user_permissions
 
     def execute(self, command, message_user, groupme_id, message_attachments=None):
         """
@@ -158,20 +144,6 @@ class GroupmeCommandHandler:
                                                                           splitCommandList[3]))
                     mention = Mentions(loci=[0, len(botResponse)], user_ids=[groupme_id])
                     client.bots.post(bot_id=bot_id, text=str(botResponse), attachments=[mention])
-
-
-
-    def reboot(self, groupme_id):
-        """
-        Restarts the bot
-        :return: {String} returns the command !reboot
-        """
-        reboot = "!reboot"
-        if self.get_user_permissions(groupme_id) == 1:
-            return reboot
-        else:
-            client.bots.post(bot_id=bot_id, text="You do not have permission to use !reboot")
-
 
 
     def list_commands(self, user):

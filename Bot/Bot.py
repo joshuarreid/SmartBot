@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from Token import bot_id, groupyToken, groupy_id
+from Token import groupyToken, groupy_id
 from groupy.client import Client
 from Bot.GroupmeCommandHandler import GroupmeCommandHandler
 
@@ -41,14 +41,8 @@ class Bot:
             fetchedMessageList = list(group.messages.list_after(message_id=self.recentMessageID))
             if len(fetchedMessageList) != 0:
                 mostRecentMessage = fetchedMessageList[0]
-                botResponse = self.command_handler.execute(mostRecentMessage.text, mostRecentMessage.name,
-                                                           mostRecentMessage.user_id, mostRecentMessage.attachments)
+                self.command_handler.execute(mostRecentMessage.text, mostRecentMessage.name, mostRecentMessage.user_id, mostRecentMessage.attachments)
                 self.recentMessageID = mostRecentMessage.id
-
-                if botResponse == "!reboot":
-                    client.bots.post(bot_id=bot_id, text="Rebooting!")
-                    print("Bot is rebooting")
-                    break
 
             self.command_handler.run_scheduled_tasks()
             time.sleep(2)

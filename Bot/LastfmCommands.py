@@ -1,7 +1,8 @@
 from Token import lastfm_api_key, lastfm_api_secret, lastfm_username, lastfm_password_hash
 from LastfmAPIWrapper.LastFmWrapper import LastfmWrapper as Lastfm
 from Database.Database import Database
-from datetime import datetime
+import datetime as DT
+
 
 
 
@@ -21,20 +22,17 @@ class LastfmCommands:
         self.commands = {
             "!playbacks": self.list_playbacks,
             "!toptracks": self.list_top_tracks,
-            "!topartiststext": self.list_top_artists, #TODO FIX - command now showing up in !commands
             "!topartists": self.list_top_artists, #TODO img_top_artists
             "!playcount": self.get_playback_count,
-            "!compareme": self.compareMe,
             "!rewind": self.rewind
         }
 
         self.commandDescriptions = {
             "!playbacks": "1year, recents, now",
-            "!toptracks": "Top Tracks",
-            "!topartists": "Top Artists",
+            "!toptracks": "overall, week, month, year",
+            "!topartists": "overall, week, month, year",
             "!playcount": "Total plays",
-            "!compareme": "Compare to other user",
-            "!rank": "Not Implimented"
+            "!rewind": "[x]year"
         }
 
         self.database = Database('LastFm')
@@ -113,19 +111,23 @@ class LastfmCommands:
         :param groupme_id: {Integer} the user's groupme id
         :return: {String} A formatted list of tracks
         """
-        return "Shits in the works"
-        if period == "1year":  # One year ago Tracks
-            lastfm_username = self.get_username(groupme_id)
-            botResponse = "One Year Ago Tracks: @" + str(lastfm_username).title() + "\r\n"
-            trackList = pylast.oneYearAgoTracks(lastfm_username) #TODO PRIORITY: use FIXED_LastFmWrapper get_tracks(oneyearago - 1day, oneyearago)
-            botResponse += str(self.format_by_time(trackList))
-            return botResponse
-        elif period == "recents":  # Past twenty-four hours
+
+        if period == "recents":
             lastfm_username = self.get_username(groupme_id)
             botResponse = "Recently Played Tracks: @" + str(lastfm_username).title() + "\r\n"
-            trackList = pylast.playbackPastDay(lastfm_username) #TODO PRIORITY: use FIXED_LastFmWrapper get_tracks(currenttime - 1day, currenttime)
-            botResponse += str(self.format_by_time(trackList))
-            return botResponse
+            time_from = self.lastfm.get_unix_timestamp(hours_ago=24)
+            time_to = self.lastfm.get_unix_timestamp()
+            recently_played_list = self.lastfm.get_tracks(
+                lastfm_username=lastfm_username,
+                time_from=time_from,
+                time_to=time_to,
+                limit=200)
+            if recently_played_list == None:
+                botResponse += "None"
+            else:
+                botResponse += self.format_by_time(recently_played_list)
+
+
         elif period == "now":  # Currently Playing
             lastfm_username = self.get_username(groupme_id)
             botResponse = "Currently Playing: @" + str(lastfm_username).title() + "\r\n"
@@ -138,7 +140,7 @@ class LastfmCommands:
                         botResponse += str(track.artist) + " - " + str(track.title)
                     except UnicodeEncodeError:
                         botResponse += "Unreadable Track"
-            return botResponse
+        return botResponse
 
 
 
@@ -155,8 +157,7 @@ class LastfmCommands:
             "overall": "overall",
             "week": "7day",
             "month": "1month",
-            "year": "12month",
-            "date": "mm-dd-yyyy-hh-mm"
+            "year": "12month"
         }
 
         lastfm_username = self.get_username(groupme_id)
@@ -186,7 +187,6 @@ class LastfmCommands:
             "week": "7day",
             "month": "1month",
             "year": "12month"
-            #mm.dd.yyyy
         }
 
         lastfm_username = self.get_username(groupme_id)
@@ -197,7 +197,7 @@ class LastfmCommands:
                 botResponse += "None"
             else:
                 rank = 1
-                for item in listOfArtists:
+                for item in listOfArtists: #TODO implement format_by_rank
                     if len(botResponse) < 900:  ### Checking if response is under the 1000 character limit ###
                         try:
                             botResponse += str(rank) + ". " + str(item.item) + " (" + str(
@@ -256,29 +256,6 @@ class LastfmCommands:
 
 
 
-    def compareMe(self, groupme_id, other_groupme_id, period="overall"):
-        """
-        compares two users' top tracks and top artists by finding the inner intersection
-        of their top tracks and artists
-
-        :param groupme_id: {Integer} the user's groupme id
-        :param other_groupme_id: {Integer} another user's groupme id
-        :param period: {String} time period to fetch top artists from
-        :return: {String} formatted list of both user's top artists and tracks
-        """
-
-        periodOptions = {
-            "overall": "overall",
-            "week": "7day",
-            "month": "1month",
-            "year": "12month"
-        }
-
-        return "This command was a mess. Shit's in the works"
-
-
-
-
     def rewind(self, groupme_id, period="1year"):
         """
         This method should return a user's one year ago today statistics including:
@@ -286,20 +263,24 @@ class LastfmCommands:
             - top tracks the week of one year ago
             - recent tracks from past 6 hours one year ago
 
-        :param groupme_id:
-        :return:
+        :param groupme_id: {Integer} the user's groupme id
+        :return: {String} A summary of x years ago
+        """
+
+
+        """
+        First calculating time stamps for inputted number of years ago
         """
         lastfm_username = self.get_username(groupme_id)
-
-
         time_to_days_ago = int(period[0]) * 365
         time_from_days_ago = time_to_days_ago + 7
+        time_to = self.lastfm.get_unix_timestamp(days_ago=time_to_days_ago)
+        time_from = self.lastfm.get_unix_timestamp(days_ago=time_from_days_ago)
+        botResponse = "In " + str(DT.datetime.now().year - int(period[0])) + ": @" + str(lastfm_username).title() + "\r\n"
 
-        time_to = int(self.lastfm.get_unix_timestamp(days_ago=time_to_days_ago))
-        time_from = int(self.lastfm.get_unix_timestamp(days_ago=time_from_days_ago))
-        botResponse = str(period[0]) + "year(s) ago: @" + str(lastfm_username).title() + "\r\n"
-
-
+        """
+        Fetching the top 3 tracks 
+        """
         top_tracks_list = self.lastfm.get_top_tracks(
             lastfm_username=lastfm_username,
             time_to=time_to,
@@ -316,6 +297,10 @@ class LastfmCommands:
             botResponse += str(rank) + ". " + track[0] + " (" + str(track[1]) + " Plays)" + "\r\n"
             rank += 1
 
+
+        """
+        Fetching the top 3 artists
+        """
         botResponse += "\r\nYour Top Artists This Week: \n"
         top_artists_list = self.lastfm.get_top_artists(
             lastfm_username=lastfm_username,
@@ -328,8 +313,13 @@ class LastfmCommands:
             botResponse += str(rank) + ". " + artist[0] + " (" + str(artist[1]) + " Plays)" + "\r\n"
             rank += 1
 
+
+        """
+        Fetching what tracks user was currently listening to at the current time.
+        time_from is recalculated to be 5 hours before the current time
+        """
         botResponse += "\r\nYou Were Listening To: \n"
-        time_from = int(self.lastfm.get_unix_timestamp(days_ago=time_to_days_ago, hours_ago=5))
+        time_from = self.lastfm.get_unix_timestamp(days_ago=time_to_days_ago, hours_ago=5)
         currently_playing_tracks = self.lastfm.get_tracks(
             lastfm_username=lastfm_username,
             time_to=time_to,
@@ -340,8 +330,6 @@ class LastfmCommands:
             botResponse += "None"
         else:
             botResponse += self.format_by_time(currently_playing_tracks)
-
-
 
         return botResponse
 
